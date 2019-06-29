@@ -14,14 +14,14 @@ public class BlastZone : MonoBehaviour {
 		
 	}
 
-
-    /*~~~~~~~~~~~~~~ ALL THINGS BELOW NEED TO BE WORKED ON ~~~~~~~~~~~~~~~~~~~~*/
-    //Use Start() and Update() as needed
-
-
-    //Function that detects the object, determines if it is a player, and if it is kills them
-    void KillPlayer()
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-
+        //Function that detects the object, determines if it is a player, and if it is kills them
+        if(collision.gameObject.tag != "Player")
+        {
+            return;
+        }
+        GameManager.Instance.PlayerKill(collision.gameObject.GetComponent<PlayerManager>().playerNum);
+        Destroy(collision.gameObject);
     }
 }

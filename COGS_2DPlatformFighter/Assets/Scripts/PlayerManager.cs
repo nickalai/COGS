@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PlayerManager : MonoBehaviour {
 
+    public int playerNum; //playerNum starts at 1
     public bool isGrounded { get; set; } //Whether or not the player is grounded
     public bool facingRight { get; set; } //Whether or not the player is facing right
     public BoxCollider2D hitbox; //BoxCollider2D on the player character to be used as hitbox
