@@ -49,6 +49,11 @@ public class PlayerManager : MonoBehaviour {
 
     public void PlayerStagger(Collider2D col)
     {
+        //TODO: Replace Set Damage with Attack Specific Damages
+        Debug.Log("5 Damage Dealt by " + col.name);
+        GameManager.Instance.PlayerDamage(playerNum, 5);
+        //TODO: Add Knockback
+        //TODO: Add Knockback Specific to each attack
         Debug.Log("HIT! by " + col.name + " = Totally sent flying");
     }
 

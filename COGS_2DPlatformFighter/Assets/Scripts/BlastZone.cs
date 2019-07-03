@@ -22,6 +22,6 @@ public class BlastZone : MonoBehaviour {
             return;
         }
         GameManager.Instance.PlayerKill(collision.gameObject.GetComponent<PlayerManager>().playerNum);
-        Destroy(collision.gameObject);
+        //Destroy(collision.gameObject);
     }
 }
