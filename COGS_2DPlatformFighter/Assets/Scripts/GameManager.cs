@@ -122,6 +122,14 @@ public class GameManager : MonoBehaviour {
                 switch (lastHit)
                 {
                     case 0: //If lastHit is 0, that means no player hit them and it's an SD
+                        if(playerNum == 1)
+                        {
+                            player1Score -= 1;
+                        }
+                        else
+                        {
+                            player2Score -= 1;
+                        }
                         break;
                     case 1: //If lastHit is 1, that means player1 was the last player to hit the dying player
                         player1Score += 1;
