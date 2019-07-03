@@ -110,6 +110,34 @@ public class GameManager : MonoBehaviour {
             case Gamemode.TIME:
                 //Going to need some sort of logic to determine whether it was an SD or a kill; possibly attaching "lastHit" as a player number and -1 when not hit, refreshing when on the ground
                 //TODO: Add Score logic for time
+                int lastHit = -1;
+                foreach(GameObject player in players)
+                {
+                    if(player.GetComponent<PlayerManager>().playerNum == playerNum)
+                    {
+                        lastHit = player.GetComponent<PlayerManager>().lastHit;
+                    }
+                }
+                Debug.Log("Last hit: Player " + lastHit); //NOTE: This will always be 0, since last hit is reset when the player is on the ground when PlayerMove is attached until knockback is added.
+                switch (lastHit)
+                {
+                    case 0: //If lastHit is 0, that means no player hit them and it's an SD
+                        break;
+                    case 1: //If lastHit is 1, that means player1 was the last player to hit the dying player
+                        player1Score += 1;
+                        break;
+                    case 2: //If lastHit is 2, that means player1 was the last player to hit the dying player
+                        player2Score += 1;
+                        break;
+                }
+                if(playerNum == 1)
+                {
+                    player1Score -= 1;
+                }
+                else if(playerNum == 2)
+                {
+                    player2Score -= 1;
+                }
                 PlayerRespawn(playerNum);
                 break;
             case Gamemode.STAMINA:
@@ -161,6 +189,8 @@ public class GameManager : MonoBehaviour {
         }
         newPlayer.transform.position = spawnpoint.position;
         newPlayer.GetComponent<PlayerManager>().playerNum = playerNum;
+        newPlayer.GetComponent<PlayerManager>().lastHit = 0;
+
     }
 
     public void PlayerDamage(int playerNum, int damageValue)

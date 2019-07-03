@@ -52,6 +52,7 @@ public class PlayerMovement : MonoBehaviour {
             isFastFalling = false;
             hasAirDodged = false;
             jumpsLeft = maxJumps; //When you're grounded, you regain your max jumps
+            GetComponent<PlayerManager>().lastHit = 0; //When Grounded, lastHit resets
         }
 
         //Change player movement based on whether or not player is sprinting/in the air

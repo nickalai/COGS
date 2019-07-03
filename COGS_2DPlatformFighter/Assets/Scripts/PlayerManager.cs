@@ -10,6 +10,7 @@ public class PlayerManager : MonoBehaviour {
     public BoxCollider2D hitbox; //BoxCollider2D on the player character to be used as hitbox
     public bool isDodging { get; set; }//Whether or not the player is dodging
     public bool isAttacking { get; set; } //Keeping track of whether or not the player is attacking(To prevent multiple attacks at once)
+    public int lastHit { get; set; } //int playerNum of last player to hit this one
 
     public enum PlayerState
     {
@@ -49,12 +50,24 @@ public class PlayerManager : MonoBehaviour {
 
     public void PlayerStagger(Collider2D col)
     {
+        if (col.tag.Equals("BlastZone")) //Blast Zone can't stagger the player
+        {
+            return;
+        }
+
         //TODO: Replace Set Damage with Attack Specific Damages
         Debug.Log("5 Damage Dealt by " + col.name);
         GameManager.Instance.PlayerDamage(playerNum, 5);
         //TODO: Add Knockback
         //TODO: Add Knockback Specific to each attack
         Debug.Log("HIT! by " + col.name + " = Totally sent flying");
+        if (col.tag.Equals("Projectile")) {
+            lastHit = col.GetComponent<ProjectileScript>().shooter.GetComponent<PlayerManager>().playerNum;
+        }
+        else if (col.transform.parent.gameObject.tag.Equals("Player")) //If a player isn't doing the damage, lastHit should not be updated
+        {
+            lastHit = col.transform.parent.gameObject.GetComponent<PlayerManager>().playerNum;
+        }
     }
 
     public void PlayerThrown(PlayerThrow throwType)

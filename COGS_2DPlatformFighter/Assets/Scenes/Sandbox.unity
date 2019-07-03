@@ -808,7 +808,7 @@ GameObject:
   - component: {fileID: 489554036}
   m_Layer: 0
   m_Name: Blast Zone
-  m_TagString: Untagged
+  m_TagString: BlastZone
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
