@@ -182,10 +182,26 @@ public class GameManager : MonoBehaviour {
         if(playerNum == 1 )
         {
             newPlayer = Instantiate(player1Prefab);
+            if(gamemode == Gamemode.STAMINA)
+            {
+                player1Damage = 100;
+            }
+            else
+            {
+                player1Damage = 0;
+            }
         }
         else
         {
             newPlayer = Instantiate(player2Prefab);
+            if (gamemode == Gamemode.STAMINA)
+            {
+                player2Damage = 100;
+            }
+            else
+            {
+                player2Damage = 0;
+            }
         }
         newPlayer.transform.position = spawnpoint.position;
         newPlayer.GetComponent<PlayerManager>().playerNum = playerNum;
