@@ -3,24 +3,30 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerAttack : MonoBehaviour {
+    
+    [System.Serializable] public struct Attack
+    {
+        public GameObject hitbox; //For melee: where attacks will hit.  For projectile: where projectiles will spawn
+        public float attackTime;  //How long each attack takes(aka how long until you can attack again)
+    }
 
-    [SerializeField] private GameObject Bair;
-    [SerializeField] private GameObject Fair;
-    [SerializeField] private GameObject Uair;
-    [SerializeField] private GameObject Dair;
-    [SerializeField] private GameObject Nair;
+    [SerializeField] private Attack Bair;
+    [SerializeField] private Attack Fair;
+    [SerializeField] private Attack Uair;
+    [SerializeField] private Attack Dair;
+    [SerializeField] private Attack Nair;
 
-    [SerializeField] private GameObject Ftilt;
-    [SerializeField] private GameObject Utilt;
-    [SerializeField] private GameObject Dtilt;
-    [SerializeField] private GameObject Jab;
+    [SerializeField] private Attack Ftilt;
+    [SerializeField] private Attack Utilt;
+    [SerializeField] private Attack Dtilt;
+    [SerializeField] private Attack Jab;
 
-    [SerializeField] private GameObject FSpecial;
-    [SerializeField] private GameObject USpecial;
-    [SerializeField] private GameObject DSpecial;
-    [SerializeField] private GameObject FASpecial;
-    [SerializeField] private GameObject UASpecial;
-    [SerializeField] private GameObject DASpecial;
+    [SerializeField] private Attack FSpecial;
+    [SerializeField] private Attack USpecial;
+    [SerializeField] private Attack DSpecial;
+    [SerializeField] private Attack FASpecial;
+    [SerializeField] private Attack UASpecial;
+    [SerializeField] private Attack DASpecial;
 
     [SerializeField] private GameObject Grab;
 
@@ -32,28 +38,6 @@ public class PlayerAttack : MonoBehaviour {
     private BoxCollider2D hitbox;
 
     private int maxColliders = 4; //Can only hit 4 players (including yourself)
-
-    //How long each attack takes(aka how long until you can attack again)
-    private float backAirAttackTime = 0.2f;
-    private float forwardAirAttackTime = 0.2f;
-    private float upAirAttackTime = 0.2f;
-    private float downAirAttacktime = 0.2f;
-    private float neutralAirAttackTime = 0.2f;
-
-    private float forwardTiltAttackTime = 0.2f;
-    private float upTiltAttackTime = 0.2f;
-    private float downTiltAttackTime = 0.2f;
-    private float jabAttackTime = 0.2f;
-
-    private float forwardSpecialAttackTime = 0.4f;
-    private float upSpecialAttackTime = 0.4f;
-    private float downSpecialAttackTime = 0.4f;
-    private float neutralSpecialAttackTime = 0.4f;
-
-    private float forwardAirSpecialAttackTime = 0.4f;
-    private float upAirSpecialAttackTime = 0.4f;
-    private float downAirSpecialAttackTime = 0.4f;
-    private float neutralAirSpecialAttackTime = 0.4f;
 
     [SerializeField] private float projectileSpeed = 10f;
 
@@ -169,12 +153,12 @@ public class PlayerAttack : MonoBehaviour {
     //Function for managing all attacks, should make calls to the attack functions below
 
     //Nic's Edit: All attack functions call this as a coroutine with hitboxes and delay as parameters
-    IEnumerator AttackCalled(GameObject attack, float attackTime)
+    IEnumerator AttackCalled(Attack attack)
     {
         pss.Push(Player.PlayerState.ATTACKING);
-        CircleCollider2D hitbox = attack.GetComponent<CircleCollider2D>();
+        CircleCollider2D hitbox = attack.hitbox.GetComponent<CircleCollider2D>();
         hitbox.enabled = true;
-        yield return new WaitForSeconds(attackTime);
+        yield return new WaitForSeconds(attack.attackTime);
         hitbox.enabled = false;
         pss.Pop(); //ERROR HANDLING: WHAT IF THEY'RE STAGGERED?  THIS WOULD NO LONGER POP THE ATTACK, BUT IT WOULD POP THE STAGGER, Unless Stagger is implemented to always be position 1 (and not 0).  That way, stagger would overrule attacks
     }
@@ -185,19 +169,19 @@ public class PlayerAttack : MonoBehaviour {
         //Btilt isn't a thing, can only be executed by turning around and ftilting.
         if (Input.GetAxisRaw("Horizontal") < 0 && !pm.facingRight || Input.GetAxisRaw("Horizontal") > 0 && pm.facingRight) //Ftilt
         {
-            StartCoroutine(AttackCalled(Ftilt, forwardTiltAttackTime));
+            StartCoroutine(AttackCalled(Ftilt));
         }
         else if (Input.GetAxisRaw("Vertical") > 0) //Utilt
         {
-            StartCoroutine(AttackCalled(Utilt, upTiltAttackTime));
+            StartCoroutine(AttackCalled(Utilt));
         }
         else if (Input.GetAxisRaw("Vertical") < 0) //Dtilt
         {
-            StartCoroutine(AttackCalled(Dtilt, downTiltAttackTime));
+            StartCoroutine(AttackCalled(Dtilt));
         }
         else //Jab if attack is called and no directional attack is selected
         {
-            StartCoroutine(AttackCalled(Jab, jabAttackTime));
+            StartCoroutine(AttackCalled(Jab));
         }
 
     }
@@ -207,23 +191,23 @@ public class PlayerAttack : MonoBehaviour {
     {
         if (Input.GetAxisRaw("Horizontal") < 0 && pm.facingRight || Input.GetAxisRaw("Horizontal") > 0 && !pm.facingRight) //Backair
         {
-            StartCoroutine(AttackCalled(Bair, backAirAttackTime));
+            StartCoroutine(AttackCalled(Bair));
         }
         else if (Input.GetAxisRaw("Horizontal") < 0 && !pm.facingRight || Input.GetAxisRaw("Horizontal") > 0 && pm.facingRight) //Fair
         {
-            StartCoroutine(AttackCalled(Fair, forwardAirAttackTime));
+            StartCoroutine(AttackCalled(Fair));
         }
         else if (Input.GetAxisRaw("Vertical") > 0) //Up air
         {
-            StartCoroutine(AttackCalled(Uair, upAirAttackTime));
+            StartCoroutine(AttackCalled(Uair));
         }
         else if (Input.GetAxisRaw("Vertical") < 0) //Dair
         {
-            StartCoroutine(AttackCalled(Dair, downAirAttacktime));
+            StartCoroutine(AttackCalled(Dair));
         }
         else //Nair if attack is called and no directional attack is selected
         {
-            StartCoroutine(AttackCalled(Nair, neutralAirAttackTime));
+            StartCoroutine(AttackCalled(Nair));
         }
 
     }
@@ -236,7 +220,7 @@ public class PlayerAttack : MonoBehaviour {
         {
             pmove.PlayerFlip(); //Need to flip them if they're facing backwards
             //Aerial Special
-            StartCoroutine(SpawnProjectile(FASpecial, FASpecialDirection, forwardAirSpecialAttackTime)); //Flipped FASpecial direction
+            StartCoroutine(SpawnProjectile(FASpecial, FASpecialDirection)); //Flipped FASpecial direction
             //Can't possibly be grounded
         }
         else if (Input.GetAxisRaw("Horizontal") < 0 && !pm.facingRight || Input.GetAxisRaw("Horizontal") > 0 && pm.facingRight) //Side Special (Forwards)
@@ -245,12 +229,12 @@ public class PlayerAttack : MonoBehaviour {
             if (pss.Peek() == Player.PlayerState.AERIAL)
             {
                 //Aerial Special
-                StartCoroutine(SpawnProjectile(FASpecial, FASpecialDirection, forwardAirSpecialAttackTime));
+                StartCoroutine(SpawnProjectile(FASpecial, FASpecialDirection));
             }
             else
             {
                 //Grounded Special
-                StartCoroutine(SpawnProjectile(FSpecial, FSpecialDirection, forwardSpecialAttackTime));
+                StartCoroutine(SpawnProjectile(FSpecial, FSpecialDirection));
             }
 
         }
@@ -260,12 +244,12 @@ public class PlayerAttack : MonoBehaviour {
             if (pss.Peek() == Player.PlayerState.AERIAL)
             {
                 //Aerial Special
-                StartCoroutine(SpawnProjectile(UASpecial, UASpecialDirection, upAirSpecialAttackTime));
+                StartCoroutine(SpawnProjectile(UASpecial, UASpecialDirection));
             }
             else
             {
                 //Grounded Special
-                StartCoroutine(SpawnProjectile(USpecial, USpecialDirection, upSpecialAttackTime));
+                StartCoroutine(SpawnProjectile(USpecial, USpecialDirection));
             }
 
         }
@@ -275,12 +259,12 @@ public class PlayerAttack : MonoBehaviour {
             if (pss.Peek() == Player.PlayerState.AERIAL)
             {
                 //Aerial Special
-                StartCoroutine(SpawnProjectile(DASpecial, DASpecialDirection, downAirSpecialAttackTime));
+                StartCoroutine(SpawnProjectile(DASpecial, DASpecialDirection));
             }
             else
             {
                 //Grounded Special
-                StartCoroutine(SpawnProjectile(DSpecial, DSpecialDirection, downSpecialAttackTime));
+                StartCoroutine(SpawnProjectile(DSpecial, DSpecialDirection));
             }
 
         }
@@ -318,13 +302,13 @@ public class PlayerAttack : MonoBehaviour {
     }
 
     //Spawns a Projectile at the given Attacks location
-    IEnumerator SpawnProjectile(GameObject specialAttack, Vector2 direction, float specialAttackTime)
+    IEnumerator SpawnProjectile(Attack specialAttack, Vector2 direction)
     {
         pss.Push(Player.PlayerState.ATTACKING);
 
         GameObject projectileClone = Instantiate(projectile);
         projectileClone.GetComponent<ProjectileScript>().shooter = this.gameObject;
-        projectileClone.transform.position = specialAttack.transform.position;
+        projectileClone.transform.position = specialAttack.hitbox.transform.position;
 
         Rigidbody2D rb = projectileClone.GetComponent<Rigidbody2D>();
 
@@ -337,7 +321,7 @@ public class PlayerAttack : MonoBehaviour {
             rb.velocity = new Vector2(direction.x * -1, direction.y) * projectileSpeed;
         }
 
-        yield return new WaitForSeconds(specialAttackTime);
+        yield return new WaitForSeconds(specialAttack.attackTime);
 
         pss.Pop(); //ERROR HANDLING: WHAT IF THEY'RE STAGGERED?  THIS WOULD NO LONGER POP THE ATTACK, BUT IT WOULD POP THE STAGGER, Unless Stagger is implemented to always be position 1 (and not 0).  That way, stagger would overrule attacks.  But then the coroutine would have to be interrupted to prevent a pre-emptive pop
 

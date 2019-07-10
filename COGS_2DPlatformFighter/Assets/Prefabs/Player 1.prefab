@@ -807,21 +807,51 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 164b0156c73268142abb361fc39e38b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Bair: {fileID: 1298792939446014}
-  Fair: {fileID: 1596903478374976}
-  Uair: {fileID: 1940659109430144}
-  Dair: {fileID: 1546135754920592}
-  Nair: {fileID: 1222218246035116}
-  Ftilt: {fileID: 1095836322253356}
-  Utilt: {fileID: 1343179894286296}
-  Dtilt: {fileID: 1458229779026806}
-  Jab: {fileID: 1702424861964630}
-  FSpecial: {fileID: 1700408389926586}
-  USpecial: {fileID: 1327404127000536}
-  DSpecial: {fileID: 1117627324770948}
-  FASpecial: {fileID: 1750744820027532}
-  UASpecial: {fileID: 1858411150822900}
-  DASpecial: {fileID: 1450228903337022}
+  Bair:
+    hitbox: {fileID: 1298792939446014}
+    attackTime: 0.2
+  Fair:
+    hitbox: {fileID: 1596903478374976}
+    attackTime: 0.2
+  Uair:
+    hitbox: {fileID: 1940659109430144}
+    attackTime: 0.2
+  Dair:
+    hitbox: {fileID: 1546135754920592}
+    attackTime: 0.2
+  Nair:
+    hitbox: {fileID: 1222218246035116}
+    attackTime: 0.2
+  Ftilt:
+    hitbox: {fileID: 1095836322253356}
+    attackTime: 0.2
+  Utilt:
+    hitbox: {fileID: 1343179894286296}
+    attackTime: 0.2
+  Dtilt:
+    hitbox: {fileID: 1458229779026806}
+    attackTime: 0.2
+  Jab:
+    hitbox: {fileID: 1702424861964630}
+    attackTime: 0.2
+  FSpecial:
+    hitbox: {fileID: 1700408389926586}
+    attackTime: 0.4
+  USpecial:
+    hitbox: {fileID: 1327404127000536}
+    attackTime: 0.4
+  DSpecial:
+    hitbox: {fileID: 1117627324770948}
+    attackTime: 0.4
+  FASpecial:
+    hitbox: {fileID: 1750744820027532}
+    attackTime: 0.4
+  UASpecial:
+    hitbox: {fileID: 1858411150822900}
+    attackTime: 0.4
+  DASpecial:
+    hitbox: {fileID: 1450228903337022}
+    attackTime: 0.4
   Grab: {fileID: 1853049542988332}
   projectile: {fileID: 1842984726651662, guid: 7d5f03f233354bd46b41aa6260568651, type: 2}
   projectileSpeed: 10
