@@ -4,19 +4,19 @@ using UnityEngine;
 
 public class HitDetection : MonoBehaviour {
 
-    PlayerManager pm;
+    Player p;
     PlayerStateStack pss;
 
 	// Use this for initialization
 	void Start () {
-        pm = transform.parent.GetComponent<PlayerManager>();
+        p = transform.parent.GetComponent<Player>();
         pss = transform.parent.GetComponent<PlayerStateStack>();
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		
-        if(pss.Peek() != PlayerManager.PlayerState.GRABBED && IsInvoking("EscapeGrab"))
+        if(pss.Peek() != Player.PlayerState.GRABBED && IsInvoking("EscapeGrab"))
         {
             CancelInvoke(); //Cancel EscapeGrab if the player isn't grabbed.
         }
@@ -44,19 +44,19 @@ public class HitDetection : MonoBehaviour {
         {
             Debug.Log("Player Grabbed!");
             this.transform.parent.parent = col.transform.parent;
-            col.transform.parent.GetComponent<PlayerStateStack>().Push(PlayerManager.PlayerState.GRABBING); //Add Grabbing State to grabber
-            pss.Push(PlayerManager.PlayerState.GRABBED);
+            col.transform.parent.GetComponent<PlayerStateStack>().Push(Player.PlayerState.GRABBING); //Add Grabbing State to grabber
+            pss.Push(Player.PlayerState.GRABBED);
             Invoke("EscapeGrab", 5); //HOW DO CANCEL INVOKE?
             return;
         }
 
-        pm.PlayerStagger(col);
+        p.PlayerStagger(col);
     }
 
     void EscapeGrab()
     {
         //Players only escape the grab if they're still grabbed
-        if(pss.Peek() == PlayerManager.PlayerState.GRABBED)
+        if(pss.Peek() == Player.PlayerState.GRABBED)
         {
             this.transform.parent.parent.GetComponent<PlayerStateStack>().Pop(); //Remove Grabbing state from grabber
             this.transform.parent.parent = null;

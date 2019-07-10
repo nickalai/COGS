@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerManager : MonoBehaviour {
+public class Player : MonoBehaviour {
 
     public int playerNum; //playerNum starts at 1
     public bool isGrounded { get; set; } //Whether or not the player is grounded
@@ -43,11 +43,6 @@ public class PlayerManager : MonoBehaviour {
         //Physics2D.IgnoreLayerCollision(2, 2, true); //Ignore layer collision between Ignore Raycast Layers (What I currently have the players on)
     }
 
-    // Update is called once per frame
-    void Update () {
-        
-	}
-
     public void PlayerStagger(Collider2D col)
     {
         if (col.tag.Equals("BlastZone")) //Blast Zone can't stagger the player
@@ -62,11 +57,11 @@ public class PlayerManager : MonoBehaviour {
         //TODO: Add Knockback Specific to each attack
         Debug.Log("HIT! by " + col.name + " = Totally sent flying");
         if (col.tag.Equals("Projectile")) {
-            lastHit = col.GetComponent<ProjectileScript>().shooter.GetComponent<PlayerManager>().playerNum;
+            lastHit = col.GetComponent<ProjectileScript>().shooter.GetComponent<Player>().playerNum;
         }
         else if (col.transform.parent.gameObject.tag.Equals("Player")) //If a player isn't doing the damage, lastHit should not be updated
         {
-            lastHit = col.transform.parent.gameObject.GetComponent<PlayerManager>().playerNum;
+            lastHit = col.transform.parent.gameObject.GetComponent<Player>().playerNum;
         }
     }
 

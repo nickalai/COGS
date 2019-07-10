@@ -73,7 +73,7 @@ public class GameManager : MonoBehaviour {
         GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
         foreach (GameObject player in players)
         {
-            if(player.GetComponent<PlayerManager>().playerNum == playerNum)
+            if(player.GetComponent<Player>().playerNum == playerNum)
             {
                 Destroy(player);
                 break; //There should only be one of each playerNum at any given time, so breaking here is efficient
@@ -113,9 +113,9 @@ public class GameManager : MonoBehaviour {
                 int lastHit = -1;
                 foreach(GameObject player in players)
                 {
-                    if(player.GetComponent<PlayerManager>().playerNum == playerNum)
+                    if(player.GetComponent<Player>().playerNum == playerNum)
                     {
-                        lastHit = player.GetComponent<PlayerManager>().lastHit;
+                        lastHit = player.GetComponent<Player>().lastHit;
                     }
                 }
                 Debug.Log("Last hit: Player " + lastHit); //NOTE: This will always be 0, since last hit is reset when the player is on the ground when PlayerMove is attached until knockback is added.
@@ -212,8 +212,8 @@ public class GameManager : MonoBehaviour {
             }
         }
         newPlayer.transform.position = spawnpoint.position;
-        newPlayer.GetComponent<PlayerManager>().playerNum = playerNum;
-        newPlayer.GetComponent<PlayerManager>().lastHit = 0;
+        newPlayer.GetComponent<Player>().playerNum = playerNum;
+        newPlayer.GetComponent<Player>().lastHit = 0;
 
     }
 

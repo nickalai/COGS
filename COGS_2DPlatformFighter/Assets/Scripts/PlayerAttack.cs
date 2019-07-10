@@ -26,7 +26,7 @@ public class PlayerAttack : MonoBehaviour {
 
     [SerializeField] private GameObject projectile;
 
-    private PlayerManager pm;
+    private Player pm;
     private PlayerStateStack pss;
     private PlayerMovement pmove;
     private BoxCollider2D hitbox;
@@ -69,14 +69,14 @@ public class PlayerAttack : MonoBehaviour {
 
     // Use this for initialization
     void Start() {
-        pm = GetComponent<PlayerManager>();
+        pm = GetComponent<Player>();
         pss = GetComponent<PlayerStateStack>();
         pmove = GetComponent<PlayerMovement>();
     }
 
     // Update is called once per frame
     void Update() {
-        if(pss.Peek() == PlayerManager.PlayerState.GRABBING)
+        if(pss.Peek() == Player.PlayerState.GRABBING)
         {
             Transform[] transformList = this.GetComponentsInChildren<Transform>();
             GameObject grabbedPlayer = null;
@@ -99,7 +99,7 @@ public class PlayerAttack : MonoBehaviour {
                         Debug.Log("Up Throw");
                         pss.Pop(); //Popping Grabbing
                         grabbedPlayerPss.Pop(); //Popping Grabbed
-                        grabbedPlayer.GetComponent<PlayerManager>().PlayerThrown(PlayerManager.PlayerThrow.UP_THROW); //Call thrown in playerManager when player is thrown
+                        grabbedPlayer.GetComponent<Player>().PlayerThrown(Player.PlayerThrow.UP_THROW); //Call thrown in playerManager when player is thrown
                         grabbedPlayer.transform.parent = null;
                     }
                     else if (Input.GetAxisRaw("Vertical") < 0)
@@ -107,7 +107,7 @@ public class PlayerAttack : MonoBehaviour {
                         Debug.Log("Down Throw");
                         pss.Pop(); //Popping Grabbing
                         grabbedPlayerPss.Pop(); //Popping Grabbed
-                        grabbedPlayer.GetComponent<PlayerManager>().PlayerThrown(PlayerManager.PlayerThrow.DOWN_THROW); //Call thrown in playerManager when player is thrown
+                        grabbedPlayer.GetComponent<Player>().PlayerThrown(Player.PlayerThrow.DOWN_THROW); //Call thrown in playerManager when player is thrown
                         grabbedPlayer.transform.parent = null;
                     }
                 }
@@ -118,7 +118,7 @@ public class PlayerAttack : MonoBehaviour {
                         Debug.Log("Forward Throw");
                         pss.Pop(); //Popping Grabbing
                         grabbedPlayerPss.Pop(); //Popping Grabbed
-                        grabbedPlayer.GetComponent<PlayerManager>().PlayerThrown(PlayerManager.PlayerThrow.FORWARD_THROW); //Call thrown in playerManager when player is thrown
+                        grabbedPlayer.GetComponent<Player>().PlayerThrown(Player.PlayerThrow.FORWARD_THROW); //Call thrown in playerManager when player is thrown
                         grabbedPlayer.transform.parent = null;
                     }
                     else if (Input.GetAxisRaw("Horizontal") < 0 && pm.facingRight || Input.GetAxisRaw("Horizontal") > 0 && !pm.facingRight)
@@ -126,7 +126,7 @@ public class PlayerAttack : MonoBehaviour {
                         Debug.Log("Back Throw");
                         pss.Pop(); //Popping Grabbing
                         grabbedPlayerPss.Pop(); //Popping Grabbed
-                        grabbedPlayer.GetComponent<PlayerManager>().PlayerThrown(PlayerManager.PlayerThrow.BACK_THROW); //Call thrown in playerManager when player is thrown
+                        grabbedPlayer.GetComponent<Player>().PlayerThrown(Player.PlayerThrow.BACK_THROW); //Call thrown in playerManager when player is thrown
                         grabbedPlayer.transform.parent = null;
                     }
                 }
@@ -137,23 +137,23 @@ public class PlayerAttack : MonoBehaviour {
 
         if (Input.GetButtonDown("Attack")) //As long as they aren't in an animation, pressing attack will launch an attack
         {
-            if (pss.Peek() == PlayerManager.PlayerState.GROUNDED || pss.Peek() == PlayerManager.PlayerState.IDLE)
+            if (pss.Peek() == Player.PlayerState.GROUNDED || pss.Peek() == Player.PlayerState.IDLE)
             {
                 GroundedAttack();
             }
 
-            else if (pss.Peek() == PlayerManager.PlayerState.AERIAL)
+            else if (pss.Peek() == Player.PlayerState.AERIAL)
             {
                 AerialAttack();
             }
         }
         //You can't make multiple inputs at once, so else-if suite is optimal
-        else if (Input.GetButtonDown("Special") && (pss.Peek() == PlayerManager.PlayerState.GROUNDED || pss.Peek() == PlayerManager.PlayerState.IDLE || pss.Peek() == PlayerManager.PlayerState.AERIAL)) //As long as they aren't in an animation, pressing attack will launch an attack
+        else if (Input.GetButtonDown("Special") && (pss.Peek() == Player.PlayerState.GROUNDED || pss.Peek() == Player.PlayerState.IDLE || pss.Peek() == Player.PlayerState.AERIAL)) //As long as they aren't in an animation, pressing attack will launch an attack
         {
             SpecialAttack();
         }
 
-        else if (Input.GetButtonDown("Grab") && (pss.Peek() == PlayerManager.PlayerState.GROUNDED || pss.Peek() == PlayerManager.PlayerState.IDLE))
+        else if (Input.GetButtonDown("Grab") && (pss.Peek() == Player.PlayerState.GROUNDED || pss.Peek() == Player.PlayerState.IDLE))
         {
             StartCoroutine(GrabPlayer());            
         }
@@ -171,7 +171,7 @@ public class PlayerAttack : MonoBehaviour {
     //Nic's Edit: All attack functions call this as a coroutine with hitboxes and delay as parameters
     IEnumerator AttackCalled(GameObject attack, float attackTime)
     {
-        pss.Push(PlayerManager.PlayerState.ATTACKING);
+        pss.Push(Player.PlayerState.ATTACKING);
         CircleCollider2D hitbox = attack.GetComponent<CircleCollider2D>();
         hitbox.enabled = true;
         yield return new WaitForSeconds(attackTime);
@@ -242,7 +242,7 @@ public class PlayerAttack : MonoBehaviour {
         else if (Input.GetAxisRaw("Horizontal") < 0 && !pm.facingRight || Input.GetAxisRaw("Horizontal") > 0 && pm.facingRight) //Side Special (Forwards)
         {
 
-            if (pss.Peek() == PlayerManager.PlayerState.AERIAL)
+            if (pss.Peek() == Player.PlayerState.AERIAL)
             {
                 //Aerial Special
                 StartCoroutine(SpawnProjectile(FASpecial, FASpecialDirection, forwardAirSpecialAttackTime));
@@ -257,7 +257,7 @@ public class PlayerAttack : MonoBehaviour {
         else if (Input.GetAxisRaw("Vertical") > 0) //Up Special
         {
 
-            if (pss.Peek() == PlayerManager.PlayerState.AERIAL)
+            if (pss.Peek() == Player.PlayerState.AERIAL)
             {
                 //Aerial Special
                 StartCoroutine(SpawnProjectile(UASpecial, UASpecialDirection, upAirSpecialAttackTime));
@@ -272,7 +272,7 @@ public class PlayerAttack : MonoBehaviour {
         else if (Input.GetAxisRaw("Vertical") < 0) //Down Special
         {
 
-            if (pss.Peek() == PlayerManager.PlayerState.AERIAL)
+            if (pss.Peek() == Player.PlayerState.AERIAL)
             {
                 //Aerial Special
                 StartCoroutine(SpawnProjectile(DASpecial, DASpecialDirection, downAirSpecialAttackTime));
@@ -288,7 +288,7 @@ public class PlayerAttack : MonoBehaviour {
         {
             Debug.Log("Neutral Special");
 
-            if (pss.Peek() == PlayerManager.PlayerState.AERIAL)
+            if (pss.Peek() == Player.PlayerState.AERIAL)
             {
                 //Aerial Special
             }
@@ -320,7 +320,7 @@ public class PlayerAttack : MonoBehaviour {
     //Spawns a Projectile at the given Attacks location
     IEnumerator SpawnProjectile(GameObject specialAttack, Vector2 direction, float specialAttackTime)
     {
-        pss.Push(PlayerManager.PlayerState.ATTACKING);
+        pss.Push(Player.PlayerState.ATTACKING);
 
         GameObject projectileClone = Instantiate(projectile);
         projectileClone.GetComponent<ProjectileScript>().shooter = this.gameObject;
