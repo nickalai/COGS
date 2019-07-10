@@ -27,18 +27,6 @@ public class HitDetection : MonoBehaviour {
     {
         if (col.tag == "Attack")
         {
-            /*
-             *     public Attack Bair;
-                    public Attack Fair;
-                    public Attack Uair;
-                    public Attack Dair;
-                    public Attack Nair;
-
-                    public Attack Ftilt;
-                    public Attack Utilt;
-                    public Attack Dtilt;
-                    public Attack Jab;
-             * */
             PlayerAttack attacker = col.transform.parent.GetComponent<PlayerAttack>();
             PlayerAttack.Attack attack;
             if (col.name.Equals("Bair"))
@@ -94,7 +82,13 @@ public class HitDetection : MonoBehaviour {
 
         if (col.tag == "Projectile")
         {
-            p.PlayerStagger(col);
+            PlayerAttack attacker = col.GetComponent<ProjectileScript>().shooter.GetComponent<PlayerAttack>();
+            PlayerAttack.Attack attack = new PlayerAttack.Attack();
+            attack.hitbox = col.gameObject;
+            attack.attackDamage = attacker.projectileDamage;
+            attack.knockbackAmount = attacker.projectileKnockback;
+            attack.knockbackDirection = col.GetComponent<Rigidbody2D>().velocity.normalized;
+            p.PlayerStagger(attack);
         }
 
         if (col.tag == "Grab")

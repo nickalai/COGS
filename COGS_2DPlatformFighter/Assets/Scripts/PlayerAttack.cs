@@ -43,6 +43,8 @@ public class PlayerAttack : MonoBehaviour {
     private int maxColliders = 4; //Can only hit 4 players (including yourself)
 
     [SerializeField] private float projectileSpeed = 10f;
+    public float projectileKnockback = 500f;
+    public int projectileDamage = 5;
 
     private float grabTime = 0.2f;
 

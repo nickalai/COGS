@@ -53,25 +53,22 @@ public class Player : MonoBehaviour {
         GameManager.Instance.PlayerDamage(playerNum, 5);
         //TODO: Add Knockback
         //TODO: Add Knockback Specific to each attack
-        Debug.Log("HIT! by " + col.name + " = Totally sent flying");
-        if (col.tag.Equals("Projectile")) {
-            lastHit = col.GetComponent<ProjectileScript>().shooter.GetComponent<Player>().playerNum;
-        }
-        else if (col.transform.parent.gameObject.tag.Equals("Player")) //If a player isn't doing the damage, lastHit should not be updated
-        {
-            lastHit = col.transform.parent.gameObject.GetComponent<Player>().playerNum;
-        }
+        Debug.Log("HIT! by " + col.name + " = Totally sent flying: Non-Player Attack");
     }
 
     public void PlayerStagger(PlayerAttack.Attack attack) //PlayerStagger for all player attacks
     {
-        Debug.Log("5 Damage Dealt by " + attack.hitbox.name);
+        Debug.Log(attack.attackDamage + " Damage Dealt by " + attack.hitbox.name);
         GameManager.Instance.PlayerDamage(playerNum, attack.attackDamage);
-        //TODO: Add Knockback
         rb.AddForceAtPosition(attack.knockbackDirection * attack.knockbackAmount, attack.hitbox.transform.position);
-        //TODO: Add Knockback Specific to each attack
-        Debug.Log("HIT! by " + attack.hitbox.name + " = Totally sent flying");
-        lastHit = attack.hitbox.transform.parent.gameObject.GetComponent<Player>().playerNum;
+        if (attack.hitbox.tag.Equals("Projectile"))
+        {
+            lastHit = attack.hitbox.GetComponent<ProjectileScript>().shooter.GetComponent<Player>().playerNum;
+        }
+        else
+        {
+            lastHit = attack.hitbox.transform.parent.gameObject.GetComponent<Player>().playerNum;
+        }
     }
 
     public void PlayerThrown(PlayerThrow throwType)
