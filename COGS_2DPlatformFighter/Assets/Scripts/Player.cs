@@ -45,11 +45,6 @@ public class Player : MonoBehaviour {
 
     public void PlayerStagger(Collider2D col)
     {
-        if (col.tag.Equals("BlastZone")) //Blast Zone can't stagger the player
-        {
-            return;
-        }
-
         //TODO: Replace Set Damage with Attack Specific Damages
         Debug.Log("5 Damage Dealt by " + col.name);
         GameManager.Instance.PlayerDamage(playerNum, 5);

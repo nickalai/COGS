@@ -40,7 +40,12 @@ public class HitDetection : MonoBehaviour {
             return;
         }
 
-        if(col.tag == "Grab")
+        if (col.tag.Equals("BlastZone")) //Blast Zone can't stagger the player
+        {
+            return;
+        }
+
+        if (col.tag == "Grab")
         {
             Debug.Log("Player Grabbed!");
             this.transform.parent.parent = col.transform.parent;
