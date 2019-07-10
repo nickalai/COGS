@@ -8,18 +8,21 @@ public class PlayerAttack : MonoBehaviour {
     {
         public GameObject hitbox; //For melee: where attacks will hit.  For projectile: where projectiles will spawn
         public float attackTime;  //How long each attack takes(aka how long until you can attack again)
+        public int attackDamage;
+        public float knockbackAmount;
+        public Vector2 knockbackDirection;
     }
 
-    [SerializeField] private Attack Bair;
-    [SerializeField] private Attack Fair;
-    [SerializeField] private Attack Uair;
-    [SerializeField] private Attack Dair;
-    [SerializeField] private Attack Nair;
+    public Attack Bair;
+    public Attack Fair;
+    public Attack Uair;
+    public Attack Dair;
+    public Attack Nair;
 
-    [SerializeField] private Attack Ftilt;
-    [SerializeField] private Attack Utilt;
-    [SerializeField] private Attack Dtilt;
-    [SerializeField] private Attack Jab;
+    public Attack Ftilt;
+    public Attack Utilt;
+    public Attack Dtilt;
+    public Attack Jab;
 
     [SerializeField] private Attack FSpecial;
     [SerializeField] private Attack USpecial;

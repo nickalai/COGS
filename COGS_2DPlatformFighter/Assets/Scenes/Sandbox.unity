@@ -1053,6 +1053,206 @@ Prefab:
       propertyPath: m_RootOrder
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 1450228903337022, guid: 1072618cb37363448b5172e5fc225cc1, type: 2}
+      propertyPath: m_TagString
+      value: Attack
+      objectReference: {fileID: 0}
+    - target: {fileID: 1858411150822900, guid: 1072618cb37363448b5172e5fc225cc1, type: 2}
+      propertyPath: m_TagString
+      value: Attack
+      objectReference: {fileID: 0}
+    - target: {fileID: 1750744820027532, guid: 1072618cb37363448b5172e5fc225cc1, type: 2}
+      propertyPath: m_TagString
+      value: Attack
+      objectReference: {fileID: 0}
+    - target: {fileID: 1117627324770948, guid: 1072618cb37363448b5172e5fc225cc1, type: 2}
+      propertyPath: m_TagString
+      value: Attack
+      objectReference: {fileID: 0}
+    - target: {fileID: 1327404127000536, guid: 1072618cb37363448b5172e5fc225cc1, type: 2}
+      propertyPath: m_TagString
+      value: Attack
+      objectReference: {fileID: 0}
+    - target: {fileID: 1700408389926586, guid: 1072618cb37363448b5172e5fc225cc1, type: 2}
+      propertyPath: m_TagString
+      value: Attack
+      objectReference: {fileID: 0}
+    - target: {fileID: 1702424861964630, guid: 1072618cb37363448b5172e5fc225cc1, type: 2}
+      propertyPath: m_TagString
+      value: Attack
+      objectReference: {fileID: 0}
+    - target: {fileID: 1458229779026806, guid: 1072618cb37363448b5172e5fc225cc1, type: 2}
+      propertyPath: m_TagString
+      value: Attack
+      objectReference: {fileID: 0}
+    - target: {fileID: 1343179894286296, guid: 1072618cb37363448b5172e5fc225cc1, type: 2}
+      propertyPath: m_TagString
+      value: Attack
+      objectReference: {fileID: 0}
+    - target: {fileID: 1095836322253356, guid: 1072618cb37363448b5172e5fc225cc1, type: 2}
+      propertyPath: m_TagString
+      value: Attack
+      objectReference: {fileID: 0}
+    - target: {fileID: 1222218246035116, guid: 1072618cb37363448b5172e5fc225cc1, type: 2}
+      propertyPath: m_TagString
+      value: Attack
+      objectReference: {fileID: 0}
+    - target: {fileID: 1546135754920592, guid: 1072618cb37363448b5172e5fc225cc1, type: 2}
+      propertyPath: m_TagString
+      value: Attack
+      objectReference: {fileID: 0}
+    - target: {fileID: 1940659109430144, guid: 1072618cb37363448b5172e5fc225cc1, type: 2}
+      propertyPath: m_TagString
+      value: Attack
+      objectReference: {fileID: 0}
+    - target: {fileID: 1596903478374976, guid: 1072618cb37363448b5172e5fc225cc1, type: 2}
+      propertyPath: m_TagString
+      value: Attack
+      objectReference: {fileID: 0}
+    - target: {fileID: 1298792939446014, guid: 1072618cb37363448b5172e5fc225cc1, type: 2}
+      propertyPath: m_TagString
+      value: Attack
+      objectReference: {fileID: 0}
+    - target: {fileID: 114525743684979214, guid: 1072618cb37363448b5172e5fc225cc1,
+        type: 2}
+      propertyPath: Bair.knockbackDirection.x
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114525743684979214, guid: 1072618cb37363448b5172e5fc225cc1,
+        type: 2}
+      propertyPath: Bair.knockbackAmount
+      value: 500
+      objectReference: {fileID: 0}
+    - target: {fileID: 114525743684979214, guid: 1072618cb37363448b5172e5fc225cc1,
+        type: 2}
+      propertyPath: Fair.knockbackDirection.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114525743684979214, guid: 1072618cb37363448b5172e5fc225cc1,
+        type: 2}
+      propertyPath: Uair.knockbackDirection.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114525743684979214, guid: 1072618cb37363448b5172e5fc225cc1,
+        type: 2}
+      propertyPath: Dair.knockbackDirection.y
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114525743684979214, guid: 1072618cb37363448b5172e5fc225cc1,
+        type: 2}
+      propertyPath: Nair.knockbackDirection.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114525743684979214, guid: 1072618cb37363448b5172e5fc225cc1,
+        type: 2}
+      propertyPath: Ftilt.knockbackDirection.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114525743684979214, guid: 1072618cb37363448b5172e5fc225cc1,
+        type: 2}
+      propertyPath: Utilt.knockbackDirection.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114525743684979214, guid: 1072618cb37363448b5172e5fc225cc1,
+        type: 2}
+      propertyPath: Dtilt.knockbackDirection.y
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114525743684979214, guid: 1072618cb37363448b5172e5fc225cc1,
+        type: 2}
+      propertyPath: Jab.knockbackDirection.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114525743684979214, guid: 1072618cb37363448b5172e5fc225cc1,
+        type: 2}
+      propertyPath: Fair.knockbackAmount
+      value: 500
+      objectReference: {fileID: 0}
+    - target: {fileID: 114525743684979214, guid: 1072618cb37363448b5172e5fc225cc1,
+        type: 2}
+      propertyPath: Uair.knockbackAmount
+      value: 500
+      objectReference: {fileID: 0}
+    - target: {fileID: 114525743684979214, guid: 1072618cb37363448b5172e5fc225cc1,
+        type: 2}
+      propertyPath: Dair.knockbackAmount
+      value: 500
+      objectReference: {fileID: 0}
+    - target: {fileID: 114525743684979214, guid: 1072618cb37363448b5172e5fc225cc1,
+        type: 2}
+      propertyPath: Nair.knockbackAmount
+      value: 500
+      objectReference: {fileID: 0}
+    - target: {fileID: 114525743684979214, guid: 1072618cb37363448b5172e5fc225cc1,
+        type: 2}
+      propertyPath: Ftilt.knockbackAmount
+      value: 500
+      objectReference: {fileID: 0}
+    - target: {fileID: 114525743684979214, guid: 1072618cb37363448b5172e5fc225cc1,
+        type: 2}
+      propertyPath: Utilt.knockbackAmount
+      value: 500
+      objectReference: {fileID: 0}
+    - target: {fileID: 114525743684979214, guid: 1072618cb37363448b5172e5fc225cc1,
+        type: 2}
+      propertyPath: Dtilt.knockbackAmount
+      value: 500
+      objectReference: {fileID: 0}
+    - target: {fileID: 114525743684979214, guid: 1072618cb37363448b5172e5fc225cc1,
+        type: 2}
+      propertyPath: Jab.knockbackAmount
+      value: 500
+      objectReference: {fileID: 0}
+    - target: {fileID: 114525743684979214, guid: 1072618cb37363448b5172e5fc225cc1,
+        type: 2}
+      propertyPath: Bair.attackDamage
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 114525743684979214, guid: 1072618cb37363448b5172e5fc225cc1,
+        type: 2}
+      propertyPath: Fair.attackDamage
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 114525743684979214, guid: 1072618cb37363448b5172e5fc225cc1,
+        type: 2}
+      propertyPath: Uair.attackDamage
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 114525743684979214, guid: 1072618cb37363448b5172e5fc225cc1,
+        type: 2}
+      propertyPath: Dair.attackDamage
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 114525743684979214, guid: 1072618cb37363448b5172e5fc225cc1,
+        type: 2}
+      propertyPath: Nair.attackDamage
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 114525743684979214, guid: 1072618cb37363448b5172e5fc225cc1,
+        type: 2}
+      propertyPath: Ftilt.attackDamage
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 114525743684979214, guid: 1072618cb37363448b5172e5fc225cc1,
+        type: 2}
+      propertyPath: Utilt.attackDamage
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 114525743684979214, guid: 1072618cb37363448b5172e5fc225cc1,
+        type: 2}
+      propertyPath: Dtilt.attackDamage
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 114525743684979214, guid: 1072618cb37363448b5172e5fc225cc1,
+        type: 2}
+      propertyPath: Jab.attackDamage
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 114525743684979214, guid: 1072618cb37363448b5172e5fc225cc1,
+        type: 2}
+      propertyPath: FSpecial.knockbackAmount
+      value: 500
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1072618cb37363448b5172e5fc225cc1, type: 2}
   m_IsPrefabAsset: 0

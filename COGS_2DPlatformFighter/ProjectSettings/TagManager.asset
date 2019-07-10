@@ -9,6 +9,7 @@ TagManager:
   - Grab
   - BlastZone
   - Projectile
+  - Attack
   layers:
   - Default
   - TransparentFX
