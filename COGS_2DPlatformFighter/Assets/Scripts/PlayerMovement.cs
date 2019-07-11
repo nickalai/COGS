@@ -10,7 +10,7 @@ public class PlayerMovement : MonoBehaviour {
     [SerializeField] private float airSpeed = 10f; //The speed at which the player moves through the air
     [SerializeField] private short maxJumps = 2; //The max number of jumps players have
 
-    private PlayerManager pm;
+    private Player p;
     private PlayerStateStack pss;
 
     private float smoothTime = 0.2f; //Internal smoothing value used for SmoothDamp
@@ -30,7 +30,7 @@ public class PlayerMovement : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         rb = GetComponent<Rigidbody2D>();
-        pm = GetComponent<PlayerManager>();
+        p = GetComponent<Player>();
         pss = GetComponent<PlayerStateStack>();
         jumpsLeft = maxJumps;
 	}
@@ -41,21 +41,22 @@ public class PlayerMovement : MonoBehaviour {
         RaycastHit2D beamToFloor = Physics2D.Raycast(transform.position, -Vector2.up, 1.3f); //1.294 should be distance to ground, but 1.3f allows leniency to avoid bugs (1.2978 occasionally popped up and prevented flipping)
 
         //Jump if player has jumps left
-        if (Input.GetButtonDown("Jump") && jumpsLeft > 0 && (pss.Peek() == PlayerManager.PlayerState.GROUNDED || pss.Peek() == PlayerManager.PlayerState.IDLE || pss.Peek() == PlayerManager.PlayerState.AERIAL))
+        if (Input.GetButtonDown("Jump") && jumpsLeft > 0 && (pss.Peek() == Player.PlayerState.GROUNDED || pss.Peek() == Player.PlayerState.IDLE || pss.Peek() == Player.PlayerState.AERIAL))
         {
             PlayerJump();
-            pss.SetState(PlayerManager.PlayerState.AERIAL);
+            pss.SetState(Player.PlayerState.AERIAL);
         }
         else if (beamToFloor.collider != null) //If you're close to the floor and haven't jumped, you must be grounded.
         {
-            pss.SetState(PlayerManager.PlayerState.GROUNDED);
+            pss.SetState(Player.PlayerState.GROUNDED);
             isFastFalling = false;
             hasAirDodged = false;
             jumpsLeft = maxJumps; //When you're grounded, you regain your max jumps
+            GetComponent<Player>().lastHit = 0; //When Grounded, lastHit resets
         }
 
         //Change player movement based on whether or not player is sprinting/in the air
-        if(pss.Peek() == PlayerManager.PlayerState.GROUNDED)
+        if(pss.Peek() == Player.PlayerState.GROUNDED)
         {
             if (Input.GetButton("Sprint"))
             {
@@ -66,7 +67,7 @@ public class PlayerMovement : MonoBehaviour {
                 horizontalMove = Input.GetAxisRaw("Horizontal") * walkSpeed;
             }
         }
-        else if(pss.Peek() == PlayerManager.PlayerState.GRABBED || pss.Peek() == PlayerManager.PlayerState.GRABBING) //If you are being grabbed/grabbing, you can't move
+        else if(pss.Peek() == Player.PlayerState.GRABBED || pss.Peek() == Player.PlayerState.GRABBING) //If you are being grabbed/grabbing, you can't move
         {
             horizontalMove = 0;
         }
@@ -74,7 +75,7 @@ public class PlayerMovement : MonoBehaviour {
         {
             horizontalMove = Input.GetAxisRaw("Horizontal") * airSpeed;
             //If you're in the air and press down after/at the peak of your jump, you fast fall
-            if (pss.Peek() == PlayerManager.PlayerState.AERIAL)
+            if (pss.Peek() == Player.PlayerState.AERIAL)
             {
                 if (Input.GetButtonDown("Vertical") && Input.GetAxisRaw("Vertical") < 0 && rb.velocity.y <= 0 && !isFastFalling)
                 {
@@ -89,7 +90,7 @@ public class PlayerMovement : MonoBehaviour {
         PlayerMove(horizontalMove);
         
         //If the player is on the ground (GROUNDED or IDLE), they can dodge roll/spot dodge
-        if(Input.GetButtonDown("Dodge") && (pss.Peek() == PlayerManager.PlayerState.IDLE || pss.Peek() == PlayerManager.PlayerState.GROUNDED))
+        if(Input.GetButtonDown("Dodge") && (pss.Peek() == Player.PlayerState.IDLE || pss.Peek() == Player.PlayerState.GROUNDED))
         {
             if(Input.GetAxisRaw("Vertical") < 0)
             {
@@ -101,7 +102,7 @@ public class PlayerMovement : MonoBehaviour {
             }
         }
         //If they're in the air and try to air dodge, they do unless they already have
-        else if (Input.GetButtonDown("Dodge") && pss.Peek() == PlayerManager.PlayerState.AERIAL && !hasAirDodged) 
+        else if (Input.GetButtonDown("Dodge") && pss.Peek() == Player.PlayerState.AERIAL && !hasAirDodged) 
         {
             StartCoroutine(PlayerAirDodge());
         }
@@ -119,11 +120,11 @@ public class PlayerMovement : MonoBehaviour {
     void PlayerMove(float horizontalVelocity)
     {
         //Flip the character model if it changes horizontal direction on the ground
-        if(pm.facingRight && horizontalVelocity < 0 && (pss.Peek() == PlayerManager.PlayerState.GROUNDED))
+        if(p.facingRight && horizontalVelocity < 0 && (pss.Peek() == Player.PlayerState.GROUNDED))
         {
             PlayerFlip();
         }
-        else if(!pm.facingRight && horizontalVelocity > 0 && (pss.Peek() == PlayerManager.PlayerState.GROUNDED))
+        else if(!p.facingRight && horizontalVelocity > 0 && (pss.Peek() == Player.PlayerState.GROUNDED))
         {
             PlayerFlip();
         }
@@ -154,9 +155,9 @@ public class PlayerMovement : MonoBehaviour {
     //Function for the player dodge rolling
     IEnumerator PlayerDodgeRoll() //IEnumerator for waitForSeconds()
     {
-        pss.Push(PlayerManager.PlayerState.DODGING);
-        pm.hitbox.enabled = false; //Disabling boxCollider hitbox
-        if(pm.facingRight)
+        pss.Push(Player.PlayerState.DODGING);
+        p.hitbox.enabled = false; //Disabling boxCollider hitbox
+        if(p.facingRight)
         {
             rb.AddForce(new Vector2(rollForce, 0f));
         }
@@ -166,17 +167,17 @@ public class PlayerMovement : MonoBehaviour {
         }
         yield return new WaitForSeconds(dodgeRollLength);
         pss.Pop(); //Since GROUNDED is set via SetState and we've disabled the hitbox, there's no way that this Pop could be anything except the DODGING we just pushed.
-        pm.hitbox.enabled = true; //Re-enabling boxCollider hitbox
+        p.hitbox.enabled = true; //Re-enabling boxCollider hitbox
     }
 
     //Function for the player dodge rolling
     IEnumerator PlayerSpotDodge() //IEnumerator for waitForSeconds()
     {
-        pss.Push(PlayerManager.PlayerState.DODGING);
-        pm.hitbox.enabled = false; //Disabling boxCollider hitbox
+        pss.Push(Player.PlayerState.DODGING);
+        p.hitbox.enabled = false; //Disabling boxCollider hitbox
         yield return new WaitForSeconds(spotDodgeLength);
         pss.Pop();
-        pm.hitbox.enabled = true; //Re-enabling boxCollider hitbox
+        p.hitbox.enabled = true; //Re-enabling boxCollider hitbox
     }
 
     //Function for player air dodging
@@ -184,9 +185,9 @@ public class PlayerMovement : MonoBehaviour {
     {
 
         //Air Dodge
-        pss.Push(PlayerManager.PlayerState.SLIDING); //SLIDING = Air Slide = Air Dodge
+        pss.Push(Player.PlayerState.SLIDING); //SLIDING = Air Slide = Air Dodge
         hasAirDodged = true;
-        pm.hitbox.enabled = false; //Disabling boxCollider hitbox
+        p.hitbox.enabled = false; //Disabling boxCollider hitbox
 
         //Apply force based on vertical/Horizontal input after zeroing out velocity
         if (Input.GetAxisRaw("Horizontal") == 0 && Input.GetAxisRaw("Vertical") == 0)
@@ -201,14 +202,14 @@ public class PlayerMovement : MonoBehaviour {
 
         yield return new WaitForSeconds(airDodgeLength);
         pss.Pop();
-        pm.hitbox.enabled = true; //Re-enabling boxCollider hitbox
+        p.hitbox.enabled = true; //Re-enabling boxCollider hitbox
 
     }
 
     //Function to flip player character horizontally
     public void PlayerFlip()
     {
-        pm.facingRight = !pm.facingRight; //Flip the variable storing the direction character's facing
+        p.facingRight = !p.facingRight; //Flip the variable storing the direction character's facing
         transform.localScale = new Vector2(transform.localScale.x * -1, transform.localScale.y); //Use negative scale to 'flip' player character
     }
 }

@@ -3,59 +3,48 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerAttack : MonoBehaviour {
+    
+    [System.Serializable] public struct Attack
+    {
+        public GameObject hitbox; //For melee: where attacks will hit.  For projectile: where projectiles will spawn
+        public float attackTime;  //How long each attack takes(aka how long until you can attack again)
+        public int attackDamage;
+        public float knockbackAmount;
+        public Vector2 knockbackDirection;
+    }
 
-    [SerializeField] private GameObject Bair;
-    [SerializeField] private GameObject Fair;
-    [SerializeField] private GameObject Uair;
-    [SerializeField] private GameObject Dair;
-    [SerializeField] private GameObject Nair;
+    public Attack Bair;
+    public Attack Fair;
+    public Attack Uair;
+    public Attack Dair;
+    public Attack Nair;
 
-    [SerializeField] private GameObject Ftilt;
-    [SerializeField] private GameObject Utilt;
-    [SerializeField] private GameObject Dtilt;
-    [SerializeField] private GameObject Jab;
+    public Attack Ftilt;
+    public Attack Utilt;
+    public Attack Dtilt;
+    public Attack Jab;
 
-    [SerializeField] private GameObject FSpecial;
-    [SerializeField] private GameObject USpecial;
-    [SerializeField] private GameObject DSpecial;
-    [SerializeField] private GameObject FASpecial;
-    [SerializeField] private GameObject UASpecial;
-    [SerializeField] private GameObject DASpecial;
+    [SerializeField] private Attack FSpecial;
+    [SerializeField] private Attack USpecial;
+    [SerializeField] private Attack DSpecial;
+    [SerializeField] private Attack FASpecial;
+    [SerializeField] private Attack UASpecial;
+    [SerializeField] private Attack DASpecial;
 
     [SerializeField] private GameObject Grab;
 
     [SerializeField] private GameObject projectile;
 
-    private PlayerManager pm;
+    private Player pm;
     private PlayerStateStack pss;
     private PlayerMovement pmove;
     private BoxCollider2D hitbox;
 
     private int maxColliders = 4; //Can only hit 4 players (including yourself)
 
-    //How long each attack takes(aka how long until you can attack again)
-    private float backAirAttackTime = 0.2f;
-    private float forwardAirAttackTime = 0.2f;
-    private float upAirAttackTime = 0.2f;
-    private float downAirAttacktime = 0.2f;
-    private float neutralAirAttackTime = 0.2f;
-
-    private float forwardTiltAttackTime = 0.2f;
-    private float upTiltAttackTime = 0.2f;
-    private float downTiltAttackTime = 0.2f;
-    private float jabAttackTime = 0.2f;
-
-    private float forwardSpecialAttackTime = 0.4f;
-    private float upSpecialAttackTime = 0.4f;
-    private float downSpecialAttackTime = 0.4f;
-    private float neutralSpecialAttackTime = 0.4f;
-
-    private float forwardAirSpecialAttackTime = 0.4f;
-    private float upAirSpecialAttackTime = 0.4f;
-    private float downAirSpecialAttackTime = 0.4f;
-    private float neutralAirSpecialAttackTime = 0.4f;
-
     [SerializeField] private float projectileSpeed = 10f;
+    public float projectileKnockback = 500f;
+    public int projectileDamage = 5;
 
     private float grabTime = 0.2f;
 
@@ -69,14 +58,14 @@ public class PlayerAttack : MonoBehaviour {
 
     // Use this for initialization
     void Start() {
-        pm = GetComponent<PlayerManager>();
+        pm = GetComponent<Player>();
         pss = GetComponent<PlayerStateStack>();
         pmove = GetComponent<PlayerMovement>();
     }
 
     // Update is called once per frame
     void Update() {
-        if(pss.Peek() == PlayerManager.PlayerState.GRABBING)
+        if(pss.Peek() == Player.PlayerState.GRABBING)
         {
             Transform[] transformList = this.GetComponentsInChildren<Transform>();
             GameObject grabbedPlayer = null;
@@ -99,7 +88,7 @@ public class PlayerAttack : MonoBehaviour {
                         Debug.Log("Up Throw");
                         pss.Pop(); //Popping Grabbing
                         grabbedPlayerPss.Pop(); //Popping Grabbed
-                        grabbedPlayer.GetComponent<PlayerManager>().PlayerThrown(PlayerManager.PlayerThrow.UP_THROW); //Call thrown in playerManager when player is thrown
+                        grabbedPlayer.GetComponent<Player>().PlayerThrown(Player.PlayerThrow.UP_THROW); //Call thrown in playerManager when player is thrown
                         grabbedPlayer.transform.parent = null;
                     }
                     else if (Input.GetAxisRaw("Vertical") < 0)
@@ -107,7 +96,7 @@ public class PlayerAttack : MonoBehaviour {
                         Debug.Log("Down Throw");
                         pss.Pop(); //Popping Grabbing
                         grabbedPlayerPss.Pop(); //Popping Grabbed
-                        grabbedPlayer.GetComponent<PlayerManager>().PlayerThrown(PlayerManager.PlayerThrow.DOWN_THROW); //Call thrown in playerManager when player is thrown
+                        grabbedPlayer.GetComponent<Player>().PlayerThrown(Player.PlayerThrow.DOWN_THROW); //Call thrown in playerManager when player is thrown
                         grabbedPlayer.transform.parent = null;
                     }
                 }
@@ -118,7 +107,7 @@ public class PlayerAttack : MonoBehaviour {
                         Debug.Log("Forward Throw");
                         pss.Pop(); //Popping Grabbing
                         grabbedPlayerPss.Pop(); //Popping Grabbed
-                        grabbedPlayer.GetComponent<PlayerManager>().PlayerThrown(PlayerManager.PlayerThrow.FORWARD_THROW); //Call thrown in playerManager when player is thrown
+                        grabbedPlayer.GetComponent<Player>().PlayerThrown(Player.PlayerThrow.FORWARD_THROW); //Call thrown in playerManager when player is thrown
                         grabbedPlayer.transform.parent = null;
                     }
                     else if (Input.GetAxisRaw("Horizontal") < 0 && pm.facingRight || Input.GetAxisRaw("Horizontal") > 0 && !pm.facingRight)
@@ -126,7 +115,7 @@ public class PlayerAttack : MonoBehaviour {
                         Debug.Log("Back Throw");
                         pss.Pop(); //Popping Grabbing
                         grabbedPlayerPss.Pop(); //Popping Grabbed
-                        grabbedPlayer.GetComponent<PlayerManager>().PlayerThrown(PlayerManager.PlayerThrow.BACK_THROW); //Call thrown in playerManager when player is thrown
+                        grabbedPlayer.GetComponent<Player>().PlayerThrown(Player.PlayerThrow.BACK_THROW); //Call thrown in playerManager when player is thrown
                         grabbedPlayer.transform.parent = null;
                     }
                 }
@@ -137,23 +126,23 @@ public class PlayerAttack : MonoBehaviour {
 
         if (Input.GetButtonDown("Attack")) //As long as they aren't in an animation, pressing attack will launch an attack
         {
-            if (pss.Peek() == PlayerManager.PlayerState.GROUNDED || pss.Peek() == PlayerManager.PlayerState.IDLE)
+            if (pss.Peek() == Player.PlayerState.GROUNDED || pss.Peek() == Player.PlayerState.IDLE)
             {
                 GroundedAttack();
             }
 
-            else if (pss.Peek() == PlayerManager.PlayerState.AERIAL)
+            else if (pss.Peek() == Player.PlayerState.AERIAL)
             {
                 AerialAttack();
             }
         }
         //You can't make multiple inputs at once, so else-if suite is optimal
-        else if (Input.GetButtonDown("Special") && (pss.Peek() == PlayerManager.PlayerState.GROUNDED || pss.Peek() == PlayerManager.PlayerState.IDLE || pss.Peek() == PlayerManager.PlayerState.AERIAL)) //As long as they aren't in an animation, pressing attack will launch an attack
+        else if (Input.GetButtonDown("Special") && (pss.Peek() == Player.PlayerState.GROUNDED || pss.Peek() == Player.PlayerState.IDLE || pss.Peek() == Player.PlayerState.AERIAL)) //As long as they aren't in an animation, pressing attack will launch an attack
         {
             SpecialAttack();
         }
 
-        else if (Input.GetButtonDown("Grab") && (pss.Peek() == PlayerManager.PlayerState.GROUNDED || pss.Peek() == PlayerManager.PlayerState.IDLE))
+        else if (Input.GetButtonDown("Grab") && (pss.Peek() == Player.PlayerState.GROUNDED || pss.Peek() == Player.PlayerState.IDLE))
         {
             StartCoroutine(GrabPlayer());            
         }
@@ -169,12 +158,12 @@ public class PlayerAttack : MonoBehaviour {
     //Function for managing all attacks, should make calls to the attack functions below
 
     //Nic's Edit: All attack functions call this as a coroutine with hitboxes and delay as parameters
-    IEnumerator AttackCalled(GameObject attack, float attackTime)
+    IEnumerator AttackCalled(Attack attack)
     {
-        pss.Push(PlayerManager.PlayerState.ATTACKING);
-        CircleCollider2D hitbox = attack.GetComponent<CircleCollider2D>();
+        pss.Push(Player.PlayerState.ATTACKING);
+        CircleCollider2D hitbox = attack.hitbox.GetComponent<CircleCollider2D>();
         hitbox.enabled = true;
-        yield return new WaitForSeconds(attackTime);
+        yield return new WaitForSeconds(attack.attackTime);
         hitbox.enabled = false;
         pss.Pop(); //ERROR HANDLING: WHAT IF THEY'RE STAGGERED?  THIS WOULD NO LONGER POP THE ATTACK, BUT IT WOULD POP THE STAGGER, Unless Stagger is implemented to always be position 1 (and not 0).  That way, stagger would overrule attacks
     }
@@ -185,19 +174,19 @@ public class PlayerAttack : MonoBehaviour {
         //Btilt isn't a thing, can only be executed by turning around and ftilting.
         if (Input.GetAxisRaw("Horizontal") < 0 && !pm.facingRight || Input.GetAxisRaw("Horizontal") > 0 && pm.facingRight) //Ftilt
         {
-            StartCoroutine(AttackCalled(Ftilt, forwardTiltAttackTime));
+            StartCoroutine(AttackCalled(Ftilt));
         }
         else if (Input.GetAxisRaw("Vertical") > 0) //Utilt
         {
-            StartCoroutine(AttackCalled(Utilt, upTiltAttackTime));
+            StartCoroutine(AttackCalled(Utilt));
         }
         else if (Input.GetAxisRaw("Vertical") < 0) //Dtilt
         {
-            StartCoroutine(AttackCalled(Dtilt, downTiltAttackTime));
+            StartCoroutine(AttackCalled(Dtilt));
         }
         else //Jab if attack is called and no directional attack is selected
         {
-            StartCoroutine(AttackCalled(Jab, jabAttackTime));
+            StartCoroutine(AttackCalled(Jab));
         }
 
     }
@@ -207,23 +196,23 @@ public class PlayerAttack : MonoBehaviour {
     {
         if (Input.GetAxisRaw("Horizontal") < 0 && pm.facingRight || Input.GetAxisRaw("Horizontal") > 0 && !pm.facingRight) //Backair
         {
-            StartCoroutine(AttackCalled(Bair, backAirAttackTime));
+            StartCoroutine(AttackCalled(Bair));
         }
         else if (Input.GetAxisRaw("Horizontal") < 0 && !pm.facingRight || Input.GetAxisRaw("Horizontal") > 0 && pm.facingRight) //Fair
         {
-            StartCoroutine(AttackCalled(Fair, forwardAirAttackTime));
+            StartCoroutine(AttackCalled(Fair));
         }
         else if (Input.GetAxisRaw("Vertical") > 0) //Up air
         {
-            StartCoroutine(AttackCalled(Uair, upAirAttackTime));
+            StartCoroutine(AttackCalled(Uair));
         }
         else if (Input.GetAxisRaw("Vertical") < 0) //Dair
         {
-            StartCoroutine(AttackCalled(Dair, downAirAttacktime));
+            StartCoroutine(AttackCalled(Dair));
         }
         else //Nair if attack is called and no directional attack is selected
         {
-            StartCoroutine(AttackCalled(Nair, neutralAirAttackTime));
+            StartCoroutine(AttackCalled(Nair));
         }
 
     }
@@ -236,51 +225,51 @@ public class PlayerAttack : MonoBehaviour {
         {
             pmove.PlayerFlip(); //Need to flip them if they're facing backwards
             //Aerial Special
-            StartCoroutine(SpawnProjectile(FASpecial, FASpecialDirection, forwardAirSpecialAttackTime)); //Flipped FASpecial direction
+            StartCoroutine(SpawnProjectile(FASpecial, FASpecialDirection)); //Flipped FASpecial direction
             //Can't possibly be grounded
         }
         else if (Input.GetAxisRaw("Horizontal") < 0 && !pm.facingRight || Input.GetAxisRaw("Horizontal") > 0 && pm.facingRight) //Side Special (Forwards)
         {
 
-            if (pss.Peek() == PlayerManager.PlayerState.AERIAL)
+            if (pss.Peek() == Player.PlayerState.AERIAL)
             {
                 //Aerial Special
-                StartCoroutine(SpawnProjectile(FASpecial, FASpecialDirection, forwardAirSpecialAttackTime));
+                StartCoroutine(SpawnProjectile(FASpecial, FASpecialDirection));
             }
             else
             {
                 //Grounded Special
-                StartCoroutine(SpawnProjectile(FSpecial, FSpecialDirection, forwardSpecialAttackTime));
+                StartCoroutine(SpawnProjectile(FSpecial, FSpecialDirection));
             }
 
         }
         else if (Input.GetAxisRaw("Vertical") > 0) //Up Special
         {
 
-            if (pss.Peek() == PlayerManager.PlayerState.AERIAL)
+            if (pss.Peek() == Player.PlayerState.AERIAL)
             {
                 //Aerial Special
-                StartCoroutine(SpawnProjectile(UASpecial, UASpecialDirection, upAirSpecialAttackTime));
+                StartCoroutine(SpawnProjectile(UASpecial, UASpecialDirection));
             }
             else
             {
                 //Grounded Special
-                StartCoroutine(SpawnProjectile(USpecial, USpecialDirection, upSpecialAttackTime));
+                StartCoroutine(SpawnProjectile(USpecial, USpecialDirection));
             }
 
         }
         else if (Input.GetAxisRaw("Vertical") < 0) //Down Special
         {
 
-            if (pss.Peek() == PlayerManager.PlayerState.AERIAL)
+            if (pss.Peek() == Player.PlayerState.AERIAL)
             {
                 //Aerial Special
-                StartCoroutine(SpawnProjectile(DASpecial, DASpecialDirection, downAirSpecialAttackTime));
+                StartCoroutine(SpawnProjectile(DASpecial, DASpecialDirection));
             }
             else
             {
                 //Grounded Special
-                StartCoroutine(SpawnProjectile(DSpecial, DSpecialDirection, downSpecialAttackTime));
+                StartCoroutine(SpawnProjectile(DSpecial, DSpecialDirection));
             }
 
         }
@@ -288,7 +277,7 @@ public class PlayerAttack : MonoBehaviour {
         {
             Debug.Log("Neutral Special");
 
-            if (pss.Peek() == PlayerManager.PlayerState.AERIAL)
+            if (pss.Peek() == Player.PlayerState.AERIAL)
             {
                 //Aerial Special
             }
@@ -318,13 +307,13 @@ public class PlayerAttack : MonoBehaviour {
     }
 
     //Spawns a Projectile at the given Attacks location
-    IEnumerator SpawnProjectile(GameObject specialAttack, Vector2 direction, float specialAttackTime)
+    IEnumerator SpawnProjectile(Attack specialAttack, Vector2 direction)
     {
-        pss.Push(PlayerManager.PlayerState.ATTACKING);
+        pss.Push(Player.PlayerState.ATTACKING);
 
         GameObject projectileClone = Instantiate(projectile);
         projectileClone.GetComponent<ProjectileScript>().shooter = this.gameObject;
-        projectileClone.transform.position = specialAttack.transform.position;
+        projectileClone.transform.position = specialAttack.hitbox.transform.position;
 
         Rigidbody2D rb = projectileClone.GetComponent<Rigidbody2D>();
 
@@ -337,7 +326,7 @@ public class PlayerAttack : MonoBehaviour {
             rb.velocity = new Vector2(direction.x * -1, direction.y) * projectileSpeed;
         }
 
-        yield return new WaitForSeconds(specialAttackTime);
+        yield return new WaitForSeconds(specialAttack.attackTime);
 
         pss.Pop(); //ERROR HANDLING: WHAT IF THEY'RE STAGGERED?  THIS WOULD NO LONGER POP THE ATTACK, BUT IT WOULD POP THE STAGGER, Unless Stagger is implemented to always be position 1 (and not 0).  That way, stagger would overrule attacks.  But then the coroutine would have to be interrupted to prevent a pre-emptive pop
 

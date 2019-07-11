@@ -2,13 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerManager : MonoBehaviour {
+public class Player : MonoBehaviour {
 
+    public int playerNum; //playerNum starts at 1
     public bool isGrounded { get; set; } //Whether or not the player is grounded
     public bool facingRight { get; set; } //Whether or not the player is facing right
     public BoxCollider2D hitbox; //BoxCollider2D on the player character to be used as hitbox
     public bool isDodging { get; set; }//Whether or not the player is dodging
     public bool isAttacking { get; set; } //Keeping track of whether or not the player is attacking(To prevent multiple attacks at once)
+    public int lastHit { get; set; } //int playerNum of last player to hit this one
+
+    private Rigidbody2D rb;
 
     public enum PlayerState
     {
@@ -38,17 +42,33 @@ public class PlayerManager : MonoBehaviour {
     void Start () {
         facingRight = true;
         pss = GetComponent<PlayerStateStack>();
+        rb = GetComponent<Rigidbody2D>();
         //Physics2D.IgnoreLayerCollision(2, 2, true); //Ignore layer collision between Ignore Raycast Layers (What I currently have the players on)
     }
 
-    // Update is called once per frame
-    void Update () {
-        
-	}
-
-    public void PlayerStagger(Collider2D col)
+    public void PlayerStagger(Collider2D col) //PlayerStagger for all cases beyond player attacks
     {
-        Debug.Log("HIT! by " + col.name + " = Totally sent flying");
+        //TODO: Replace Set Damage with Attack Specific Damages
+        Debug.Log("5 Damage Dealt by " + col.name);
+        GameManager.Instance.PlayerDamage(playerNum, 5);
+        //TODO: Add Knockback
+        //TODO: Add Knockback Specific to each attack
+        Debug.Log("HIT! by " + col.name + " = Totally sent flying: Non-Player Attack");
+    }
+
+    public void PlayerStagger(PlayerAttack.Attack attack) //PlayerStagger for all player attacks
+    {
+        Debug.Log(attack.attackDamage + " Damage Dealt by " + attack.hitbox.name);
+        GameManager.Instance.PlayerDamage(playerNum, attack.attackDamage);
+        rb.AddForceAtPosition(attack.knockbackDirection * attack.knockbackAmount, attack.hitbox.transform.position);
+        if (attack.hitbox.tag.Equals("Projectile"))
+        {
+            lastHit = attack.hitbox.GetComponent<ProjectileScript>().shooter.GetComponent<Player>().playerNum;
+        }
+        else
+        {
+            lastHit = attack.hitbox.transform.parent.gameObject.GetComponent<Player>().playerNum;
+        }
     }
 
     public void PlayerThrown(PlayerThrow throwType)
