@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Player : MonoBehaviour {
 
+    public int playerScore;
+    public int playerDamage;
     public int playerNum; //playerNum starts at 1
     public bool isGrounded { get; set; } //Whether or not the player is grounded
     public bool facingRight { get; set; } //Whether or not the player is facing right
