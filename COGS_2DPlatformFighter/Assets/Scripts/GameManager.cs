@@ -38,7 +38,7 @@ public class GameManager : MonoBehaviour {
         //Using string parameter instead of Gamemode parameter because Unity doesn't seem to support enum parameters on button clicks
         SceneManager.LoadScene(1);
         Debug.Log(gamemode);
-        StartCoroutine("InitializeGame");
+        StartCoroutine(InitializeGame(gamemode));
     }
 
     public void PlayerKill(int playerNum)
@@ -93,7 +93,7 @@ public class GameManager : MonoBehaviour {
                 break;
         }
         Destroy(playerToKill);
-        players = GameObject.FindGameObjectsWithTag("Player"); //Updates GameObject[] to account for players respawned
+        StartCoroutine(RefreshPlayers());
     }
 
     public void PlayerRespawn(int playerNum, int playerScore)
@@ -141,7 +141,7 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-    public IEnumerator InitializeGame()
+    public IEnumerator InitializeGame(string gamemode)
     {
         yield return new WaitForEndOfFrame();
         yield return new WaitForEndOfFrame(); //Wait for LoadScene to be complete before beginning Initialization, which completes DURING the next frame, so we have to skip 2
@@ -176,5 +176,11 @@ public class GameManager : MonoBehaviour {
                 player.GetComponent<Player>().playerDamage = 0; //0% initial
             }
         }
+    }
+
+    public IEnumerator RefreshPlayers()
+    {
+        yield return new WaitForEndOfFrame(); //Destroy only occurs at the end of the update loop, so we have to wait for the next frame before updating the players array
+        players = GameObject.FindGameObjectsWithTag("Player"); //Updates GameObject[] to account for players respawned
     }
 }
