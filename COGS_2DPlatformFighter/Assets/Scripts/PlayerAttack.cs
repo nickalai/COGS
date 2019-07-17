@@ -11,6 +11,7 @@ public class PlayerAttack : MonoBehaviour {
         public int attackDamage;
         public float knockbackAmount;
         public Vector2 knockbackDirection;
+        public string name;
     }
 
     public Attack Bair;
@@ -32,6 +33,10 @@ public class PlayerAttack : MonoBehaviour {
     [SerializeField] private Attack DASpecial;
 
     [SerializeField] private GameObject Grab;
+    [SerializeField] private Attack ForwardThrow;
+    [SerializeField] private Attack UpThrow;
+    [SerializeField] private Attack DownThrow;
+    [SerializeField] private Attack BackThrow;
 
     [SerializeField] private GameObject projectile;
 
@@ -88,35 +93,46 @@ public class PlayerAttack : MonoBehaviour {
                         Debug.Log("Up Throw");
                         pss.Pop(); //Popping Grabbing
                         grabbedPlayerPss.Pop(); //Popping Grabbed
-                        grabbedPlayer.GetComponent<Player>().PlayerThrown(Player.PlayerThrow.UP_THROW); //Call thrown in playerManager when player is thrown
-                        grabbedPlayer.transform.parent = null;
+                        grabbedPlayer.GetComponent<Player>().PlayerStagger(UpThrow);
+                        StartCoroutine(ReleasePlayer(grabbedPlayer));
                     }
                     else if (Input.GetAxisRaw("Vertical") < 0)
                     {
                         Debug.Log("Down Throw");
                         pss.Pop(); //Popping Grabbing
                         grabbedPlayerPss.Pop(); //Popping Grabbed
-                        grabbedPlayer.GetComponent<Player>().PlayerThrown(Player.PlayerThrow.DOWN_THROW); //Call thrown in playerManager when player is thrown
-                        grabbedPlayer.transform.parent = null;
+                        grabbedPlayer.GetComponent<Player>().PlayerStagger(DownThrow);
+                        StartCoroutine(ReleasePlayer(grabbedPlayer));
                     }
                 }
                 if (Input.GetButtonDown("Horizontal"))
                 {
+                    Attack tempThrow = new Attack(); //Using tempThrow as deep copy to change knockback direction without affecting original
                     if (Input.GetAxisRaw("Horizontal") > 0 && pm.facingRight || Input.GetAxisRaw("Horizontal") < 0 && !pm.facingRight)
                     {
                         Debug.Log("Forward Throw");
                         pss.Pop(); //Popping Grabbing
                         grabbedPlayerPss.Pop(); //Popping Grabbed
-                        grabbedPlayer.GetComponent<Player>().PlayerThrown(Player.PlayerThrow.FORWARD_THROW); //Call thrown in playerManager when player is thrown
-                        grabbedPlayer.transform.parent = null;
+                        tempThrow = ForwardThrow;
+                        if (!GetComponent<Player>().facingRight)
+                        {
+                            tempThrow.knockbackDirection = new Vector2(tempThrow.knockbackDirection.x * -1, tempThrow.knockbackDirection.y);
+                        }
+                        grabbedPlayer.GetComponent<Player>().PlayerStagger(tempThrow);
+                        StartCoroutine(ReleasePlayer(grabbedPlayer));
                     }
                     else if (Input.GetAxisRaw("Horizontal") < 0 && pm.facingRight || Input.GetAxisRaw("Horizontal") > 0 && !pm.facingRight)
                     {
                         Debug.Log("Back Throw");
                         pss.Pop(); //Popping Grabbing
                         grabbedPlayerPss.Pop(); //Popping Grabbed
-                        grabbedPlayer.GetComponent<Player>().PlayerThrown(Player.PlayerThrow.BACK_THROW); //Call thrown in playerManager when player is thrown
-                        grabbedPlayer.transform.parent = null;
+                        tempThrow = BackThrow;
+                        if (!GetComponent<Player>().facingRight)
+                        {
+                            tempThrow.knockbackDirection = new Vector2(tempThrow.knockbackDirection.x * -1, tempThrow.knockbackDirection.y);
+                        }
+                        grabbedPlayer.GetComponent<Player>().PlayerStagger(tempThrow);
+                        StartCoroutine(ReleasePlayer(grabbedPlayer));
                     }
                 }
 
@@ -298,6 +314,13 @@ public class PlayerAttack : MonoBehaviour {
         grabBox.enabled = true;
         yield return new WaitForSeconds(grabTime);
         grabBox.enabled = false;
+    }
+
+    //Function for releasing opponent after throw
+    IEnumerator ReleasePlayer(GameObject grabbedPlayer)
+    {
+        yield return new WaitForEndOfFrame(); //Ensures throw direction
+        grabbedPlayer.transform.parent = null;
     }
 
     //Function to check if player is grounded

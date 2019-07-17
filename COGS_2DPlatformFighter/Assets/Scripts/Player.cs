@@ -60,7 +60,7 @@ public class Player : MonoBehaviour {
 
     public void PlayerStagger(PlayerAttack.Attack attack) //PlayerStagger for all player attacks
     {
-        Debug.Log(attack.attackDamage + " Damage Dealt by " + attack.hitbox.name);
+        Debug.Log(attack.attackDamage + " Damage Dealt by " + attack.name);
         GameManager.Instance.PlayerDamage(playerNum, attack.attackDamage);
         rb.AddForceAtPosition(attack.knockbackDirection * attack.knockbackAmount, attack.hitbox.transform.position);
         if (attack.hitbox.tag.Equals("Projectile"))
