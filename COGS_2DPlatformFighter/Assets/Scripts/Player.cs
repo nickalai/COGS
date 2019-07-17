@@ -62,7 +62,7 @@ public class Player : MonoBehaviour {
     {
         Debug.Log(attack.attackDamage + " Damage Dealt by " + attack.name);
         GameManager.Instance.PlayerDamage(playerNum, attack.attackDamage);
-        rb.AddForceAtPosition(attack.knockbackDirection * attack.knockbackAmount, attack.hitbox.transform.position);
+        rb.AddForceAtPosition(CalculateKnockback(attack.knockbackDirection, attack.knockbackAmount), attack.hitbox.transform.position);
         if (attack.hitbox.tag.Equals("Projectile"))
         {
             lastHit = attack.hitbox.GetComponent<ProjectileScript>().shooter.GetComponent<Player>().playerNum;
@@ -76,5 +76,14 @@ public class Player : MonoBehaviour {
     public void PlayerThrown(PlayerThrow throwType)
     {
         Debug.Log(this.transform.name + " " + throwType + "N!");
+    }
+
+    public Vector2 CalculateKnockback(Vector2 knockbackDirection, float knockbackAmount)
+    {
+        if(GameManager.Instance.gamemode == GameManager.Gamemode.STAMINA) //In stamina, playerDamage starts at 100 and decreases to 0, so it's the same formula but modified
+        {
+            return (knockbackAmount * knockbackDirection) * ((playerDamage - 50) / 50); ;
+        }
+        return (knockbackAmount * knockbackDirection) * ((playerDamage + 50)/50);
     }
 }
