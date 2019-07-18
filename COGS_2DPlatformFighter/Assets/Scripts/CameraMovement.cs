@@ -36,19 +36,29 @@ public class CameraMovement : MonoBehaviour {
 
 	private void Update () {
         CalculateTransform();
+        CalculateSize();
     }
 
 
     private void LateUpdate()
     {
         transform.position = Vector3.MoveTowards(transform.position, desiredPos, camSpeed);
+
+        if (cam.orthographicSize < 7)
+        {
+            cam.orthographicSize = 7;
+        }
+        else if (cam.orthographicSize > 15)
+        {
+            cam.orthographicSize = 15;
+        }
     }
 
 
     //Method to find largest and lowest x and y values
     private void CalculateTransform()
     {
-        if (playerTransforms.Count <= 0) //early out if no players have been found
+        if (playerTransforms.Count <= 0) //Does not run to completion if no players have been found
         {
             return;
         }
@@ -56,11 +66,8 @@ public class CameraMovement : MonoBehaviour {
         desiredPos = Vector3.zero;
         float distance = 0f;
 
-        var ySort = playerTransforms.OrderByDescending(p => p.position.y);
-        var xSort = playerTransforms.OrderByDescending(p => p.position.x);
-
-        var camPosY = ySort.First().position.y - ySort.Last().position.y;
-        var camPosX = xSort.First().position.x - xSort.Last().position.x;
+        var camPosY = GetMaxY();
+        var camPosX = GetMaxX();
 
         var distanceY = -(camPosY + 5f) * 0.5f / Mathf.Tan(cam.fieldOfView * 0.5f * Mathf.Deg2Rad);
         var distanceX = -(camPosX / cam.aspect + 5f) * 0.5f / Mathf.Tan(cam.fieldOfView * 0.5f * Mathf.Deg2Rad);
@@ -76,5 +83,40 @@ public class CameraMovement : MonoBehaviour {
 
         desiredPos /= playerTransforms.Count;
         desiredPos.z = distance;
+    }
+
+    private void CalculateSize()
+    {
+        float maxDifX = GetMaxX();
+        float maxDifY = GetMaxY();
+
+        if (maxDifX >= maxDifY)
+        {
+            cam.orthographicSize = (maxDifX / 3);
+        }
+        else if (maxDifY > maxDifX)
+        {
+            cam.orthographicSize = (maxDifY / 2) + 3;
+        }
+        else
+        {
+            Debug.Log("Something went wrong while attempting to change the cameras size.");
+        }
+    }
+
+    private float GetMaxX()
+    {
+        var xSort = playerTransforms.OrderByDescending(p => p.position.x);
+        var maxX = xSort.First().position.x - xSort.Last().position.x;
+
+        return maxX;
+    }
+
+    private float GetMaxY()
+    {
+        var ySort = playerTransforms.OrderByDescending(p => p.position.y);
+        var maxY = ySort.First().position.y - ySort.Last().position.y;
+
+        return maxY;
     }
 }
