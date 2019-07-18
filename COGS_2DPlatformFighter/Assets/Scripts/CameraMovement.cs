@@ -6,6 +6,8 @@ using System.Linq;
 public class CameraMovement : MonoBehaviour {
 
     // VARIABLES //
+    private GameObject gameManager;
+    private GameManager gm;
 
     private new Transform transform;
     private List<Transform> playerTransforms;
@@ -25,16 +27,27 @@ public class CameraMovement : MonoBehaviour {
 
 
     private void Start () {
+        gameManager = GameObject.Find("GameManager");
+        gm = gameManager.GetComponent<GameManager>();
+        /*
         var temp = GameObject.FindGameObjectsWithTag("Player");
         playerTransforms = new List<Transform>();
         for (int i = 0; i < temp.Length; i++)
         {
             playerTransforms.Add(temp[i].GetComponent<Transform>());
-        }
+        }*/
     }
 	
 
 	private void Update () {
+        
+        var temp = GameObject.FindGameObjectsWithTag("Player");
+        playerTransforms = new List<Transform>();
+        for (int i = 0; i < gm.players.Length; i++)
+        {
+            playerTransforms.Add(gm.players[i].GetComponent<Transform>());
+        }
+
         CalculateTransform();
         CalculateSize();
     }
@@ -42,11 +55,12 @@ public class CameraMovement : MonoBehaviour {
 
     private void LateUpdate()
     {
+
         transform.position = Vector3.MoveTowards(transform.position, desiredPos, camSpeed);
 
-        if (cam.orthographicSize < 7)
+        if (cam.orthographicSize < 9)
         {
-            cam.orthographicSize = 7;
+            cam.orthographicSize = 9;
         }
         else if (cam.orthographicSize > 15)
         {
@@ -79,7 +93,10 @@ public class CameraMovement : MonoBehaviour {
             desiredPos += playerTransforms[i].position;
         }
 
-        if (distance > -10f) distance = -10f;
+        if (distance > -10f)
+        {
+            distance = -10f;
+        }
 
         desiredPos /= playerTransforms.Count;
         desiredPos.z = distance;
