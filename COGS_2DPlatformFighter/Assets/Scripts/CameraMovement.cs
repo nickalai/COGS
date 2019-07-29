@@ -5,6 +5,7 @@ using System.Linq;
 
 public class CameraMovement : MonoBehaviour {
 
+
     // VARIABLES //
     private GameObject gameManager;
     private GameManager gm;
@@ -12,6 +13,9 @@ public class CameraMovement : MonoBehaviour {
     private new Transform transform;
     private List<Transform> playerTransforms;
     private Vector3 desiredPos;
+    //Used for clamping the transform of the camera
+    public Vector2 MaxXAndY;
+    public Vector2 MinXAndY;
 
     private Camera cam;
     public float camSpeed;
@@ -26,22 +30,15 @@ public class CameraMovement : MonoBehaviour {
     }
 
 
-    private void Start () {
+    private void Start ()
+    {
         gameManager = GameObject.Find("GameManager");
         gm = gameManager.GetComponent<GameManager>();
-        /*
-        var temp = GameObject.FindGameObjectsWithTag("Player");
-        playerTransforms = new List<Transform>();
-        for (int i = 0; i < temp.Length; i++)
-        {
-            playerTransforms.Add(temp[i].GetComponent<Transform>());
-        }*/
     }
 	
 
-	private void Update () {
-        
-        var temp = GameObject.FindGameObjectsWithTag("Player");
+	private void Update ()
+    {
         playerTransforms = new List<Transform>();
         for (int i = 0; i < gm.players.Length; i++)
         {
@@ -50,14 +47,16 @@ public class CameraMovement : MonoBehaviour {
 
         CalculateTransform();
         CalculateSize();
+        ClampPosition(MinXAndY, MaxXAndY);
     }
 
 
     private void LateUpdate()
     {
-
+        //Updates the camera's position
         transform.position = Vector3.MoveTowards(transform.position, desiredPos, camSpeed);
 
+        //Keeps the camera's size within the constraints
         if (cam.orthographicSize < 9)
         {
             cam.orthographicSize = 9;
@@ -80,6 +79,7 @@ public class CameraMovement : MonoBehaviour {
         desiredPos = Vector3.zero;
         float distance = 0f;
 
+        //Obtains the largest X and Y coordinates of the players
         var camPosY = GetMaxY();
         var camPosX = GetMaxX();
 
@@ -102,6 +102,7 @@ public class CameraMovement : MonoBehaviour {
         desiredPos.z = distance;
     }
 
+    //Calculates what size the camera should be in relation to the player's transforms
     private void CalculateSize()
     {
         float maxDifX = GetMaxX();
@@ -121,6 +122,7 @@ public class CameraMovement : MonoBehaviour {
         }
     }
 
+    //Obtains the largest X value from a list of player's transforms
     private float GetMaxX()
     {
         var xSort = playerTransforms.OrderByDescending(p => p.position.x);
@@ -129,11 +131,23 @@ public class CameraMovement : MonoBehaviour {
         return maxX;
     }
 
+    //Obtains the largest Y value from a list of player's transforms
     private float GetMaxY()
     {
         var ySort = playerTransforms.OrderByDescending(p => p.position.y);
         var maxY = ySort.First().position.y - ySort.Last().position.y;
 
         return maxY;
+    }
+
+    //Prevents the camera from moving beyond the given parameters
+    private void ClampPosition(Vector2 MinXAndY, Vector2 MaxXAndY)
+    {
+        var clampedValues = transform.position;
+
+        clampedValues.x = Mathf.Clamp(transform.position.x, MinXAndY.x, MaxXAndY.x);
+        clampedValues.y = Mathf.Clamp(transform.position.y, MinXAndY.y, MaxXAndY.y);
+
+        transform.position = clampedValues;
     }
 }
