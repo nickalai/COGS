@@ -82,8 +82,8 @@ public class Player : MonoBehaviour {
     {
         if(GameManager.Instance.gamemode == GameManager.Gamemode.STAMINA) //In stamina, playerDamage starts at 100 and decreases to 0, so it's the same formula but modified
         {
-            return (knockbackAmount * knockbackDirection) * ((playerDamage - 50) / 50); ;
+            return (knockbackAmount * knockbackDirection) * (50 / ((float)playerDamage + 50)); ;
         }
-        return (knockbackAmount * knockbackDirection) * ((playerDamage + 50)/50);
+        return (knockbackAmount * knockbackDirection) * (((float)playerDamage + 50)/50);
     }
 }
