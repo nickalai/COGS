@@ -12,6 +12,7 @@ public class PlayerMovement : MonoBehaviour {
 
     private Player p;
     private PlayerStateStack pss;
+    private Animator anim;
 
     private float smoothTime = 0.2f; //Internal smoothing value used for SmoothDamp
     private float horizontalMove; //The current velocity of the player
@@ -32,6 +33,7 @@ public class PlayerMovement : MonoBehaviour {
         rb = GetComponent<Rigidbody2D>();
         p = GetComponent<Player>();
         pss = GetComponent<PlayerStateStack>();
+        anim = GetComponent<Animator>();
         jumpsLeft = maxJumps;
 	}
 	
@@ -48,23 +50,42 @@ public class PlayerMovement : MonoBehaviour {
         }
         else if (beamToFloor.collider != null) //If you're close to the floor and haven't jumped, you must be grounded.
         {
+            if(!p.isGrounded)
+            {
+                anim.SetTrigger("Land-Cancel");
+            }
+            p.isGrounded = true;
             pss.SetState(Player.PlayerState.GROUNDED);
             isFastFalling = false;
             hasAirDodged = false;
             jumpsLeft = maxJumps; //When you're grounded, you regain your max jumps
             GetComponent<Player>().lastHit = 0; //When Grounded, lastHit resets
         }
+        else //If you're not close to the floor and aren't jumping, you must not be grounded
+        {
+            p.isGrounded = false;
+        }
 
         //Change player movement based on whether or not player is sprinting/in the air
         if(pss.Peek() == Player.PlayerState.GROUNDED)
         {
-            if (Input.GetButton("Sprint"))
+            if(Mathf.Abs(Input.GetAxisRaw("Horizontal")) > 0.1)
             {
-                horizontalMove = Input.GetAxisRaw("Horizontal") * runSpeed;
+                if (Input.GetButton("Sprint"))
+                {
+                    horizontalMove = Input.GetAxisRaw("Horizontal") * runSpeed;
+                    anim.SetFloat("Move", 1.0f);
+                }
+                else
+                {
+                    horizontalMove = Input.GetAxisRaw("Horizontal") * walkSpeed;
+                    anim.SetFloat("Move", 0.5f);
+                }
             }
             else
             {
-                horizontalMove = Input.GetAxisRaw("Horizontal") * walkSpeed;
+                horizontalMove = 0f;
+                anim.SetFloat("Move", 0f);
             }
         }
         else if(pss.Peek() == Player.PlayerState.GRABBED || pss.Peek() == Player.PlayerState.GRABBING) //If you are being grabbed/grabbing, you can't move
@@ -73,6 +94,8 @@ public class PlayerMovement : MonoBehaviour {
         }
         else //If you're not being grabbed or grabbing, you can move
         {
+            //TODO: Implement a falling animation
+            //anim.SetTrigger("Falling");
             horizontalMove = Input.GetAxisRaw("Horizontal") * airSpeed;
             //If you're in the air and press down after/at the peak of your jump, you fast fall
             if (pss.Peek() == Player.PlayerState.AERIAL)
@@ -146,6 +169,7 @@ public class PlayerMovement : MonoBehaviour {
     //Function for player jumping and double jump
     void PlayerJump()
     {
+        anim.SetTrigger("Jump");
         //Reset the vertical velocity to 0 before adding jump force(to keep jumps consistent)
         rb.velocity = new Vector2(rb.velocity.x, 0f);
         rb.AddForce(new Vector2(0f, jumpForce));
@@ -155,6 +179,7 @@ public class PlayerMovement : MonoBehaviour {
     //Function for the player dodge rolling
     IEnumerator PlayerDodgeRoll() //IEnumerator for waitForSeconds()
     {
+        anim.SetTrigger("Dodge Roll");
         pss.Push(Player.PlayerState.DODGING);
         p.hitbox.enabled = false; //Disabling boxCollider hitbox
         if(p.facingRight)
@@ -165,7 +190,7 @@ public class PlayerMovement : MonoBehaviour {
         {
             rb.AddForce(new Vector2(rollForce * -1, 0f));
         }
-        yield return new WaitForSeconds(dodgeRollLength);
+        yield return new WaitForSeconds(dodgeRollLength); //TODO: Replace dodgeRollLength with a wait until no longer in dodge roll state
         pss.Pop(); //Since GROUNDED is set via SetState and we've disabled the hitbox, there's no way that this Pop could be anything except the DODGING we just pushed.
         p.hitbox.enabled = true; //Re-enabling boxCollider hitbox
     }
@@ -173,9 +198,10 @@ public class PlayerMovement : MonoBehaviour {
     //Function for the player dodge rolling
     IEnumerator PlayerSpotDodge() //IEnumerator for waitForSeconds()
     {
+        anim.SetTrigger("Spot Dodge");
         pss.Push(Player.PlayerState.DODGING);
         p.hitbox.enabled = false; //Disabling boxCollider hitbox
-        yield return new WaitForSeconds(spotDodgeLength);
+        yield return new WaitForSeconds(spotDodgeLength); //TODO: Replace spotDodgeLength with a wait until no longer in spot dodge state
         pss.Pop();
         p.hitbox.enabled = true; //Re-enabling boxCollider hitbox
     }
@@ -183,7 +209,6 @@ public class PlayerMovement : MonoBehaviour {
     //Function for player air dodging
     IEnumerator PlayerAirDodge()
     {
-
         //Air Dodge
         pss.Push(Player.PlayerState.SLIDING); //SLIDING = Air Slide = Air Dodge
         hasAirDodged = true;
@@ -193,9 +218,11 @@ public class PlayerMovement : MonoBehaviour {
         if (Input.GetAxisRaw("Horizontal") == 0 && Input.GetAxisRaw("Vertical") == 0)
         {
             //Neutral Dodge keeps initial velocity
+            anim.SetTrigger("Air Dodge");
         }
         else
         {
+            anim.SetTrigger("Air Slide");
             rb.velocity = new Vector2(0f, 0f);
         }
         rb.AddForce(new Vector2(Input.GetAxisRaw("Horizontal") * airDodgeForce, Input.GetAxisRaw("Vertical") * airDodgeForce));

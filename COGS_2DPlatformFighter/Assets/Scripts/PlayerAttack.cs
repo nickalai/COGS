@@ -60,12 +60,15 @@ public class PlayerAttack : MonoBehaviour {
     private Vector2 UASpecialDirection = new Vector2(0, 1);
     private Vector2 DASpecialDirection = new Vector2(0, -1);
 
+    private Animator anim;
+
 
     // Use this for initialization
     void Start() {
         pm = GetComponent<Player>();
         pss = GetComponent<PlayerStateStack>();
         pmove = GetComponent<PlayerMovement>();
+        anim = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -91,6 +94,7 @@ public class PlayerAttack : MonoBehaviour {
                     if (Input.GetAxisRaw("Vertical") > 0)
                     {
                         Debug.Log("Up Throw");
+                        anim.SetTrigger("UThrow");
                         pss.Pop(); //Popping Grabbing
                         grabbedPlayerPss.Pop(); //Popping Grabbed
                         grabbedPlayer.GetComponent<Player>().PlayerStagger(UpThrow);
@@ -99,6 +103,7 @@ public class PlayerAttack : MonoBehaviour {
                     else if (Input.GetAxisRaw("Vertical") < 0)
                     {
                         Debug.Log("Down Throw");
+                        anim.SetTrigger("DThrow");
                         pss.Pop(); //Popping Grabbing
                         grabbedPlayerPss.Pop(); //Popping Grabbed
                         grabbedPlayer.GetComponent<Player>().PlayerStagger(DownThrow);
@@ -111,6 +116,7 @@ public class PlayerAttack : MonoBehaviour {
                     if (Input.GetAxisRaw("Horizontal") > 0 && pm.facingRight || Input.GetAxisRaw("Horizontal") < 0 && !pm.facingRight)
                     {
                         Debug.Log("Forward Throw");
+                        anim.SetTrigger("FThrow");
                         pss.Pop(); //Popping Grabbing
                         grabbedPlayerPss.Pop(); //Popping Grabbed
                         tempThrow = ForwardThrow;
@@ -124,6 +130,7 @@ public class PlayerAttack : MonoBehaviour {
                     else if (Input.GetAxisRaw("Horizontal") < 0 && pm.facingRight || Input.GetAxisRaw("Horizontal") > 0 && !pm.facingRight)
                     {
                         Debug.Log("Back Throw");
+                        anim.SetTrigger("BThrow");
                         pss.Pop(); //Popping Grabbing
                         grabbedPlayerPss.Pop(); //Popping Grabbed
                         tempThrow = BackThrow;
@@ -179,7 +186,7 @@ public class PlayerAttack : MonoBehaviour {
         pss.Push(Player.PlayerState.ATTACKING);
         CircleCollider2D hitbox = attack.hitbox.GetComponent<CircleCollider2D>();
         hitbox.enabled = true;
-        yield return new WaitForSeconds(attack.attackTime);
+        yield return new WaitForSeconds(attack.attackTime); //TODO: Have this wait until the attack's respective animation is over
         hitbox.enabled = false;
         pss.Pop(); //ERROR HANDLING: WHAT IF THEY'RE STAGGERED?  THIS WOULD NO LONGER POP THE ATTACK, BUT IT WOULD POP THE STAGGER, Unless Stagger is implemented to always be position 1 (and not 0).  That way, stagger would overrule attacks
     }
@@ -190,18 +197,22 @@ public class PlayerAttack : MonoBehaviour {
         //Btilt isn't a thing, can only be executed by turning around and ftilting.
         if (Input.GetAxisRaw("Horizontal") < 0 && !pm.facingRight || Input.GetAxisRaw("Horizontal") > 0 && pm.facingRight) //Ftilt
         {
+            anim.SetTrigger("Ftilt");
             StartCoroutine(AttackCalled(Ftilt));
         }
         else if (Input.GetAxisRaw("Vertical") > 0) //Utilt
         {
+            anim.SetTrigger("Utilt");
             StartCoroutine(AttackCalled(Utilt));
         }
         else if (Input.GetAxisRaw("Vertical") < 0) //Dtilt
         {
+            anim.SetTrigger("Dtilt");
             StartCoroutine(AttackCalled(Dtilt));
         }
         else //Jab if attack is called and no directional attack is selected
         {
+            anim.SetTrigger("Jab");
             StartCoroutine(AttackCalled(Jab));
         }
 
@@ -212,22 +223,27 @@ public class PlayerAttack : MonoBehaviour {
     {
         if (Input.GetAxisRaw("Horizontal") < 0 && pm.facingRight || Input.GetAxisRaw("Horizontal") > 0 && !pm.facingRight) //Backair
         {
+            anim.SetTrigger("Bair");
             StartCoroutine(AttackCalled(Bair));
         }
         else if (Input.GetAxisRaw("Horizontal") < 0 && !pm.facingRight || Input.GetAxisRaw("Horizontal") > 0 && pm.facingRight) //Fair
         {
+            anim.SetTrigger("Fair");
             StartCoroutine(AttackCalled(Fair));
         }
         else if (Input.GetAxisRaw("Vertical") > 0) //Up air
         {
+            anim.SetTrigger("Uair");
             StartCoroutine(AttackCalled(Uair));
         }
         else if (Input.GetAxisRaw("Vertical") < 0) //Dair
         {
+            anim.SetTrigger("Dair");
             StartCoroutine(AttackCalled(Dair));
         }
         else //Nair if attack is called and no directional attack is selected
         {
+            anim.SetTrigger("Nair");
             StartCoroutine(AttackCalled(Nair));
         }
 
@@ -241,6 +257,7 @@ public class PlayerAttack : MonoBehaviour {
         {
             pmove.PlayerFlip(); //Need to flip them if they're facing backwards
             //Aerial Special
+            anim.SetTrigger("FASpecial");
             StartCoroutine(SpawnProjectile(FASpecial, FASpecialDirection)); //Flipped FASpecial direction
             //Can't possibly be grounded
         }
@@ -250,11 +267,13 @@ public class PlayerAttack : MonoBehaviour {
             if (pss.Peek() == Player.PlayerState.AERIAL)
             {
                 //Aerial Special
+                anim.SetTrigger("FASpecial");
                 StartCoroutine(SpawnProjectile(FASpecial, FASpecialDirection));
             }
             else
             {
                 //Grounded Special
+                anim.SetTrigger("FSpecial");
                 StartCoroutine(SpawnProjectile(FSpecial, FSpecialDirection));
             }
 
@@ -265,11 +284,13 @@ public class PlayerAttack : MonoBehaviour {
             if (pss.Peek() == Player.PlayerState.AERIAL)
             {
                 //Aerial Special
+                anim.SetTrigger("UASpecial");
                 StartCoroutine(SpawnProjectile(UASpecial, UASpecialDirection));
             }
             else
             {
                 //Grounded Special
+                anim.SetTrigger("USpecial");
                 StartCoroutine(SpawnProjectile(USpecial, USpecialDirection));
             }
 
@@ -280,11 +301,13 @@ public class PlayerAttack : MonoBehaviour {
             if (pss.Peek() == Player.PlayerState.AERIAL)
             {
                 //Aerial Special
+                anim.SetTrigger("DASpecial");
                 StartCoroutine(SpawnProjectile(DASpecial, DASpecialDirection));
             }
             else
             {
                 //Grounded Special
+                anim.SetTrigger("DSpecial");
                 StartCoroutine(SpawnProjectile(DSpecial, DSpecialDirection));
             }
 
@@ -292,6 +315,7 @@ public class PlayerAttack : MonoBehaviour {
         else //Neutral Special if attack is called and no directional attack is selected
         {
             Debug.Log("Neutral Special");
+            //TODO: Implement Neutral special
 
             if (pss.Peek() == Player.PlayerState.AERIAL)
             {
@@ -309,6 +333,7 @@ public class PlayerAttack : MonoBehaviour {
     //Function for grapping opponent
     IEnumerator GrabPlayer()
     {
+        anim.SetTrigger("Grab");
         //Push and Pop of Grabbing are handled in HitDetection
         CircleCollider2D grabBox = Grab.GetComponent<CircleCollider2D>();
         grabBox.enabled = true;
@@ -321,12 +346,8 @@ public class PlayerAttack : MonoBehaviour {
     {
         yield return new WaitForEndOfFrame(); //Ensures throw direction
         grabbedPlayer.transform.parent = null;
-    }
-
-    //Function to check if player is grounded
-    void IsGrounded()
-    {
-
+        anim.SetTrigger("Grab Release");
+        grabbedPlayer.GetComponent<Animator>().SetTrigger("Grab Release");
     }
 
     //Spawns a Projectile at the given Attacks location

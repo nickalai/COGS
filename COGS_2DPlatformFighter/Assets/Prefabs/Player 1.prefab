@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 58545942640458570}
   m_Layer: 2
   m_Name: Ftilt
-  m_TagString: Untagged
+  m_TagString: Attack
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -37,7 +37,7 @@ GameObject:
   - component: {fileID: 4778688210281496}
   m_Layer: 2
   m_Name: DSpecial
-  m_TagString: Untagged
+  m_TagString: Attack
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -53,7 +53,7 @@ GameObject:
   - component: {fileID: 58932226714182210}
   m_Layer: 2
   m_Name: Nair
-  m_TagString: Untagged
+  m_TagString: Attack
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -69,7 +69,7 @@ GameObject:
   - component: {fileID: 58904056863858682}
   m_Layer: 2
   m_Name: Bair
-  m_TagString: Untagged
+  m_TagString: Attack
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -84,7 +84,7 @@ GameObject:
   - component: {fileID: 4743812532453010}
   m_Layer: 2
   m_Name: USpecial
-  m_TagString: Untagged
+  m_TagString: Attack
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -100,7 +100,7 @@ GameObject:
   - component: {fileID: 58701720743108336}
   m_Layer: 2
   m_Name: Utilt
-  m_TagString: Untagged
+  m_TagString: Attack
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -132,7 +132,7 @@ GameObject:
   - component: {fileID: 4158580890756980}
   m_Layer: 2
   m_Name: DASpecial
-  m_TagString: Untagged
+  m_TagString: Attack
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -148,7 +148,7 @@ GameObject:
   - component: {fileID: 58219274797137034}
   m_Layer: 2
   m_Name: Dtilt
-  m_TagString: Untagged
+  m_TagString: Attack
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -164,7 +164,7 @@ GameObject:
   - component: {fileID: 58652696449469966}
   m_Layer: 2
   m_Name: Dair
-  m_TagString: Untagged
+  m_TagString: Attack
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -180,7 +180,7 @@ GameObject:
   - component: {fileID: 58591812649988666}
   m_Layer: 2
   m_Name: Fair
-  m_TagString: Untagged
+  m_TagString: Attack
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -200,6 +200,7 @@ GameObject:
   - component: {fileID: 114616412027267786}
   - component: {fileID: 114525743684979214}
   - component: {fileID: 114282612168500448}
+  - component: {fileID: 95964738938793300}
   m_Layer: 2
   m_Name: Player 1
   m_TagString: Player
@@ -217,7 +218,7 @@ GameObject:
   - component: {fileID: 4947361798344692}
   m_Layer: 2
   m_Name: FSpecial
-  m_TagString: Untagged
+  m_TagString: Attack
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -233,7 +234,7 @@ GameObject:
   - component: {fileID: 58782681301011000}
   m_Layer: 2
   m_Name: Jab
-  m_TagString: Untagged
+  m_TagString: Attack
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -248,7 +249,7 @@ GameObject:
   - component: {fileID: 4896142663854580}
   m_Layer: 2
   m_Name: FASpecial
-  m_TagString: Untagged
+  m_TagString: Attack
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -279,7 +280,7 @@ GameObject:
   - component: {fileID: 4394019015607868}
   m_Layer: 2
   m_Name: UASpecial
-  m_TagString: Untagged
+  m_TagString: Attack
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -295,7 +296,7 @@ GameObject:
   - component: {fileID: 58678876252802268}
   m_Layer: 2
   m_Name: Uair
-  m_TagString: Untagged
+  m_TagString: Attack
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -761,6 +762,24 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: 0}
   m_Size: {x: 6.84, y: 12.89}
   m_Direction: 0
+--- !u!95 &95964738938793300
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1691672753728764}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: c07cb3fe28a60864eb39b04bb976f4c5, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!114 &114189088513561806
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -794,6 +813,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 770a5e1fee2e68e47a69e5d7f81e74fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerScore: 0
+  playerDamage: 0
   playerNum: 1
   hitbox: {fileID: 61557467716218130}
 --- !u!114 &114525743684979214
@@ -810,51 +831,141 @@ MonoBehaviour:
   Bair:
     hitbox: {fileID: 1298792939446014}
     attackTime: 0.2
+    attackDamage: 5
+    knockbackAmount: 500
+    knockbackDirection: {x: -1, y: 0}
+    name: Bair
   Fair:
     hitbox: {fileID: 1596903478374976}
     attackTime: 0.2
+    attackDamage: 5
+    knockbackAmount: 500
+    knockbackDirection: {x: 1, y: 0}
+    name: Fair
   Uair:
     hitbox: {fileID: 1940659109430144}
     attackTime: 0.2
+    attackDamage: 5
+    knockbackAmount: 500
+    knockbackDirection: {x: 0, y: 1}
+    name: Uair
   Dair:
     hitbox: {fileID: 1546135754920592}
     attackTime: 0.2
+    attackDamage: 5
+    knockbackAmount: 500
+    knockbackDirection: {x: 0, y: -1}
+    name: Dair
   Nair:
     hitbox: {fileID: 1222218246035116}
     attackTime: 0.2
+    attackDamage: 5
+    knockbackAmount: 500
+    knockbackDirection: {x: 0, y: 1}
+    name: Nair
   Ftilt:
     hitbox: {fileID: 1095836322253356}
     attackTime: 0.2
+    attackDamage: 5
+    knockbackAmount: 500
+    knockbackDirection: {x: 1, y: 0}
+    name: Ftilt
   Utilt:
     hitbox: {fileID: 1343179894286296}
     attackTime: 0.2
+    attackDamage: 5
+    knockbackAmount: 500
+    knockbackDirection: {x: 0, y: 1}
+    name: Utilt
   Dtilt:
     hitbox: {fileID: 1458229779026806}
     attackTime: 0.2
+    attackDamage: 5
+    knockbackAmount: 500
+    knockbackDirection: {x: 0, y: -1}
+    name: Dtilt
   Jab:
     hitbox: {fileID: 1702424861964630}
     attackTime: 0.2
+    attackDamage: 5
+    knockbackAmount: 500
+    knockbackDirection: {x: 1, y: 0}
+    name: Jab
   FSpecial:
     hitbox: {fileID: 1700408389926586}
     attackTime: 0.4
+    attackDamage: 0
+    knockbackAmount: 500
+    knockbackDirection: {x: 0, y: 0}
+    name: FSpecial
   USpecial:
     hitbox: {fileID: 1327404127000536}
     attackTime: 0.4
+    attackDamage: 0
+    knockbackAmount: 0
+    knockbackDirection: {x: 0, y: 0}
+    name: USpecial
   DSpecial:
     hitbox: {fileID: 1117627324770948}
     attackTime: 0.4
+    attackDamage: 0
+    knockbackAmount: 0
+    knockbackDirection: {x: 0, y: 0}
+    name: DSpecial
   FASpecial:
     hitbox: {fileID: 1750744820027532}
     attackTime: 0.4
+    attackDamage: 0
+    knockbackAmount: 0
+    knockbackDirection: {x: 0, y: 0}
+    name: FASpecial
   UASpecial:
     hitbox: {fileID: 1858411150822900}
     attackTime: 0.4
+    attackDamage: 0
+    knockbackAmount: 0
+    knockbackDirection: {x: 0, y: 0}
+    name: 
   DASpecial:
     hitbox: {fileID: 1450228903337022}
     attackTime: 0.4
+    attackDamage: 0
+    knockbackAmount: 0
+    knockbackDirection: {x: 0, y: 0}
+    name: DASpecial
   Grab: {fileID: 1853049542988332}
+  ForwardThrow:
+    hitbox: {fileID: 1853049542988332}
+    attackTime: 0
+    attackDamage: 5
+    knockbackAmount: 500
+    knockbackDirection: {x: 1, y: 0}
+    name: Forward Throw
+  UpThrow:
+    hitbox: {fileID: 1853049542988332}
+    attackTime: 0
+    attackDamage: 5
+    knockbackAmount: 500
+    knockbackDirection: {x: 0, y: 1}
+    name: Up Throw
+  DownThrow:
+    hitbox: {fileID: 1853049542988332}
+    attackTime: 0
+    attackDamage: 5
+    knockbackAmount: 500
+    knockbackDirection: {x: 0, y: -1}
+    name: Down Throw
+  BackThrow:
+    hitbox: {fileID: 1853049542988332}
+    attackTime: 0
+    attackDamage: 5
+    knockbackAmount: 500
+    knockbackDirection: {x: -1, y: 0}
+    name: Back Throw
   projectile: {fileID: 1842984726651662, guid: 7d5f03f233354bd46b41aa6260568651, type: 2}
   projectileSpeed: 10
+  projectileKnockback: 500
+  projectileDamage: 5
 --- !u!114 &114616412027267786
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -905,7 +1016,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: 47af3d173132b3e448e12d793549b2ea, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0

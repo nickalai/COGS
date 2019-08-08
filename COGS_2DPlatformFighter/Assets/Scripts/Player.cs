@@ -15,6 +15,7 @@ public class Player : MonoBehaviour {
     public int lastHit { get; set; } //int playerNum of last player to hit this one
 
     private Rigidbody2D rb;
+    private Animator anim;
 
     public enum PlayerState
     {
@@ -45,6 +46,7 @@ public class Player : MonoBehaviour {
         facingRight = true;
         pss = GetComponent<PlayerStateStack>();
         rb = GetComponent<Rigidbody2D>();
+        anim = GetComponent<Animator>();
         //Physics2D.IgnoreLayerCollision(2, 2, true); //Ignore layer collision between Ignore Raycast Layers (What I currently have the players on)
     }
 
@@ -63,6 +65,7 @@ public class Player : MonoBehaviour {
         Debug.Log(attack.attackDamage + " Damage Dealt by " + attack.name);
         GameManager.Instance.PlayerDamage(playerNum, attack.attackDamage);
         rb.AddForceAtPosition(CalculateKnockback(attack.knockbackDirection, attack.knockbackAmount), attack.hitbox.transform.position);
+        anim.SetTrigger("Stagger");
         if (attack.hitbox.tag.Equals("Projectile"))
         {
             lastHit = attack.hitbox.GetComponent<ProjectileScript>().shooter.GetComponent<Player>().playerNum;

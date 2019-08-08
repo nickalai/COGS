@@ -26,6 +26,7 @@ GameObject:
   - component: {fileID: 114890214120499388}
   - component: {fileID: 114580357110869258}
   - component: {fileID: 114643982361898016}
+  - component: {fileID: 95568541000714890}
   m_Layer: 2
   m_Name: Player 2
   m_TagString: Player
@@ -137,6 +138,24 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: 0}
   m_Size: {x: 6.84, y: 12.89}
   m_Direction: 0
+--- !u!95 &95568541000714890
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1545557865880224}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: c07cb3fe28a60864eb39b04bb976f4c5, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!114 &114443840638582204
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -148,6 +167,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 770a5e1fee2e68e47a69e5d7f81e74fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerScore: 0
+  playerDamage: 0
   playerNum: 2
   hitbox: {fileID: 61309003991631144}
 --- !u!114 &114580357110869258
@@ -161,24 +182,144 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 164b0156c73268142abb361fc39e38b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Bair: {fileID: 0}
-  Fair: {fileID: 0}
-  Uair: {fileID: 0}
-  Dair: {fileID: 0}
-  Nair: {fileID: 0}
-  Ftilt: {fileID: 0}
-  Utilt: {fileID: 0}
-  Dtilt: {fileID: 0}
-  Jab: {fileID: 0}
-  FSpecial: {fileID: 0}
-  USpecial: {fileID: 0}
-  DSpecial: {fileID: 0}
-  FASpecial: {fileID: 0}
-  UASpecial: {fileID: 0}
-  DASpecial: {fileID: 0}
+  Bair:
+    hitbox: {fileID: 0}
+    attackTime: 0
+    attackDamage: 0
+    knockbackAmount: 0
+    knockbackDirection: {x: 0, y: 0}
+    name: 
+  Fair:
+    hitbox: {fileID: 0}
+    attackTime: 0
+    attackDamage: 0
+    knockbackAmount: 0
+    knockbackDirection: {x: 0, y: 0}
+    name: 
+  Uair:
+    hitbox: {fileID: 0}
+    attackTime: 0
+    attackDamage: 0
+    knockbackAmount: 0
+    knockbackDirection: {x: 0, y: 0}
+    name: 
+  Dair:
+    hitbox: {fileID: 0}
+    attackTime: 0
+    attackDamage: 0
+    knockbackAmount: 0
+    knockbackDirection: {x: 0, y: 0}
+    name: 
+  Nair:
+    hitbox: {fileID: 0}
+    attackTime: 0
+    attackDamage: 0
+    knockbackAmount: 0
+    knockbackDirection: {x: 0, y: 0}
+    name: 
+  Ftilt:
+    hitbox: {fileID: 0}
+    attackTime: 0
+    attackDamage: 0
+    knockbackAmount: 0
+    knockbackDirection: {x: 0, y: 0}
+    name: 
+  Utilt:
+    hitbox: {fileID: 0}
+    attackTime: 0
+    attackDamage: 0
+    knockbackAmount: 0
+    knockbackDirection: {x: 0, y: 0}
+    name: 
+  Dtilt:
+    hitbox: {fileID: 0}
+    attackTime: 0
+    attackDamage: 0
+    knockbackAmount: 0
+    knockbackDirection: {x: 0, y: 0}
+    name: 
+  Jab:
+    hitbox: {fileID: 0}
+    attackTime: 0
+    attackDamage: 0
+    knockbackAmount: 0
+    knockbackDirection: {x: 0, y: 0}
+    name: 
+  FSpecial:
+    hitbox: {fileID: 0}
+    attackTime: 0
+    attackDamage: 0
+    knockbackAmount: 0
+    knockbackDirection: {x: 0, y: 0}
+    name: 
+  USpecial:
+    hitbox: {fileID: 0}
+    attackTime: 0
+    attackDamage: 0
+    knockbackAmount: 0
+    knockbackDirection: {x: 0, y: 0}
+    name: 
+  DSpecial:
+    hitbox: {fileID: 0}
+    attackTime: 0
+    attackDamage: 0
+    knockbackAmount: 0
+    knockbackDirection: {x: 0, y: 0}
+    name: 
+  FASpecial:
+    hitbox: {fileID: 0}
+    attackTime: 0
+    attackDamage: 0
+    knockbackAmount: 0
+    knockbackDirection: {x: 0, y: 0}
+    name: 
+  UASpecial:
+    hitbox: {fileID: 0}
+    attackTime: 0
+    attackDamage: 0
+    knockbackAmount: 0
+    knockbackDirection: {x: 0, y: 0}
+    name: 
+  DASpecial:
+    hitbox: {fileID: 0}
+    attackTime: 0
+    attackDamage: 0
+    knockbackAmount: 0
+    knockbackDirection: {x: 0, y: 0}
+    name: 
   Grab: {fileID: 0}
+  ForwardThrow:
+    hitbox: {fileID: 0}
+    attackTime: 0
+    attackDamage: 0
+    knockbackAmount: 0
+    knockbackDirection: {x: 0, y: 0}
+    name: 
+  UpThrow:
+    hitbox: {fileID: 0}
+    attackTime: 0
+    attackDamage: 0
+    knockbackAmount: 0
+    knockbackDirection: {x: 0, y: 0}
+    name: 
+  DownThrow:
+    hitbox: {fileID: 0}
+    attackTime: 0
+    attackDamage: 0
+    knockbackAmount: 0
+    knockbackDirection: {x: 0, y: 0}
+    name: 
+  BackThrow:
+    hitbox: {fileID: 0}
+    attackTime: 0
+    attackDamage: 0
+    knockbackAmount: 0
+    knockbackDirection: {x: 0, y: 0}
+    name: 
   projectile: {fileID: 0}
   projectileSpeed: 10
+  projectileKnockback: 500
+  projectileDamage: 5
 --- !u!114 &114610392891411730
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -251,7 +392,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: 47af3d173132b3e448e12d793549b2ea, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
