@@ -38,13 +38,11 @@ public class Player : MonoBehaviour {
         UP_THROW
     }
 
-    PlayerStateStack pss; //Stack of  PlayerStates to keep track of player state
 
 
     // Use this for initialization
     void Start () {
         facingRight = true;
-        pss = GetComponent<PlayerStateStack>();
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         //Physics2D.IgnoreLayerCollision(2, 2, true); //Ignore layer collision between Ignore Raycast Layers (What I currently have the players on)

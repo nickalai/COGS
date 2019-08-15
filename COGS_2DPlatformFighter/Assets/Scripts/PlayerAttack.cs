@@ -41,7 +41,6 @@ public class PlayerAttack : MonoBehaviour {
     [SerializeField] private GameObject projectile;
 
     private Player p;
-    private PlayerStateStack pss;
     private PlayerMovement pmove;
     private BoxCollider2D hitbox;
 
@@ -66,7 +65,6 @@ public class PlayerAttack : MonoBehaviour {
     // Use this for initialization
     void Start() {
         p = GetComponent<Player>();
-        pss = GetComponent<PlayerStateStack>();
         pmove = GetComponent<PlayerMovement>();
         anim = GetComponent<Animator>();
     }
@@ -87,8 +85,6 @@ public class PlayerAttack : MonoBehaviour {
 
             if(grabbedPlayer != null)
             {
-                PlayerStateStack grabbedPlayerPss = grabbedPlayer.GetComponent<PlayerStateStack>();
-
                 if (Input.GetButtonDown("Vertical"))
                 {
                     if (Input.GetAxisRaw("Vertical") > 0)

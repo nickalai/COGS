@@ -11,7 +11,6 @@ public class PlayerMovement : MonoBehaviour {
     [SerializeField] private short maxJumps = 2; //The max number of jumps players have
 
     private Player p;
-    private PlayerStateStack pss;
     private Animator anim;
 
     private float smoothTime = 0.2f; //Internal smoothing value used for SmoothDamp
@@ -32,7 +31,6 @@ public class PlayerMovement : MonoBehaviour {
 	void Start () {
         rb = GetComponent<Rigidbody2D>();
         p = GetComponent<Player>();
-        pss = GetComponent<PlayerStateStack>();
         anim = GetComponent<Animator>();
         jumpsLeft = maxJumps;
 	}
@@ -59,6 +57,10 @@ public class PlayerMovement : MonoBehaviour {
             hasAirDodged = false;
             jumpsLeft = maxJumps; //When you're grounded, you regain your max jumps
             GetComponent<Player>().lastHit = 0; //When Grounded, lastHit resets
+        }
+        else
+        {
+            p.isGrounded = false;
         }
 
         //Change player movement based on whether or not player is sprinting/in the air
@@ -105,7 +107,6 @@ public class PlayerMovement : MonoBehaviour {
 
         //Move player based on their current speed
         PlayerMove(horizontalMove);
-        
         //If the player is on the ground (GROUNDED or IDLE), they can dodge roll/spot dodge
         if(Input.GetButtonDown("Dodge") && anim.GetCurrentAnimatorStateInfo(0).IsName("Movement") && p.isGrounded)
         {
