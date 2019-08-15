@@ -138,6 +138,7 @@ public class PlayerAttack : MonoBehaviour {
                         {
                             tempThrow.knockbackDirection = new Vector2(tempThrow.knockbackDirection.x * -1, tempThrow.knockbackDirection.y);
                         }
+                        GetComponent<PlayerMovement>().PlayerFlip();
                         grabbedPlayer.GetComponent<Player>().PlayerStagger(tempThrow);
                         StartCoroutine(ReleasePlayer(grabbedPlayer));
                     }

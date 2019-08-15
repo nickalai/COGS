@@ -6,11 +6,13 @@ public class HitDetection : MonoBehaviour {
 
     Player p;
     PlayerStateStack pss;
+    Animator anim;
 
 	// Use this for initialization
 	void Start () {
         p = transform.parent.GetComponent<Player>();
         pss = transform.parent.GetComponent<PlayerStateStack>();
+        anim = transform.parent.GetComponent<Animator>();
 	}
 	
 	// Update is called once per frame
@@ -95,6 +97,8 @@ public class HitDetection : MonoBehaviour {
         {
             Debug.Log("Player Grabbed!");
             this.transform.parent.parent = col.transform.parent;
+            col.transform.parent.GetComponent<Animator>().SetTrigger("Grab Success");
+            anim.SetTrigger("Grabbed");
             col.transform.parent.GetComponent<PlayerStateStack>().Push(Player.PlayerState.GRABBING); //Add Grabbing State to grabber
             pss.Push(Player.PlayerState.GRABBED);
             Invoke("EscapeGrab", 5); //HOW DO CANCEL INVOKE?
@@ -108,6 +112,8 @@ public class HitDetection : MonoBehaviour {
         if(pss.Peek() == Player.PlayerState.GRABBED)
         {
             this.transform.parent.parent.GetComponent<PlayerStateStack>().Pop(); //Remove Grabbing state from grabber
+            this.transform.parent.parent.GetComponent<Animator>().SetTrigger("Grab Release");
+            anim.SetTrigger("Grab Escape");
             this.transform.parent.parent = null;
             Debug.Log("Player Escaped!");
             pss.Pop();
