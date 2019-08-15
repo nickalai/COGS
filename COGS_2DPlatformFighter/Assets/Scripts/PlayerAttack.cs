@@ -73,7 +73,7 @@ public class PlayerAttack : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
-        if(pss.Peek() == Player.PlayerState.GRABBING) //TODO: If Animation State is Grabbing; ENSURE THIS WORKS EVEN THOUGH LAYER INDEX SHOULDN'T BE 0
+        if(anim.GetCurrentAnimatorStateInfo(0).IsName("Grabbing"))
         {
             Transform[] transformList = this.GetComponentsInChildren<Transform>();
             GameObject grabbedPlayer = null;
@@ -95,8 +95,6 @@ public class PlayerAttack : MonoBehaviour {
                     {
                         Debug.Log("Up Throw");
                         anim.SetTrigger("UThrow");
-                        pss.Pop(); //Popping Grabbing TODO: Add Throw
-                        grabbedPlayerPss.Pop(); //Popping Grabbed TODO: Double Check that stagger appropriately removes Grabbed state
                         grabbedPlayer.GetComponent<Player>().PlayerStagger(UpThrow);
                         StartCoroutine(ReleasePlayer(grabbedPlayer));
                     }
@@ -104,8 +102,6 @@ public class PlayerAttack : MonoBehaviour {
                     {
                         Debug.Log("Down Throw");
                         anim.SetTrigger("DThrow");
-                        pss.Pop(); //Popping Grabbing  TODO: Add Throw
-                        grabbedPlayerPss.Pop(); //Popping Grabbed  TODO: Double Check that stagger appropriately removes Grabbed state
                         grabbedPlayer.GetComponent<Player>().PlayerStagger(DownThrow);
                         StartCoroutine(ReleasePlayer(grabbedPlayer));
                     }
@@ -117,8 +113,6 @@ public class PlayerAttack : MonoBehaviour {
                     {
                         Debug.Log("Forward Throw");
                         anim.SetTrigger("FThrow");
-                        pss.Pop(); //Popping Grabbing TODO: Add Throw
-                        grabbedPlayerPss.Pop(); //Popping Grabbed  TODO: Double Check that stagger appropriately removes Grabbed state
                         tempThrow = ForwardThrow;
                         if (!GetComponent<Player>().facingRight)
                         {
@@ -131,8 +125,6 @@ public class PlayerAttack : MonoBehaviour {
                     {
                         Debug.Log("Back Throw");
                         anim.SetTrigger("BThrow");
-                        pss.Pop(); //Popping Grabbing TODO: Add Throw
-                        grabbedPlayerPss.Pop(); //Popping Grabbed TODO: Double Check that stagger appropriately removes Grabbed state
                         tempThrow = BackThrow;
                         if (!GetComponent<Player>().facingRight)
                         {
@@ -346,7 +338,7 @@ public class PlayerAttack : MonoBehaviour {
         yield return new WaitForEndOfFrame(); //Ensures throw direction
         grabbedPlayer.transform.parent = null;
         anim.SetTrigger("Grab Release");
-        grabbedPlayer.GetComponent<Animator>().SetTrigger("Grab Release");
+        //No need to allow grabbed player to escape since they'll go directly to stagger
     }
 
     //Spawns a Projectile at the given Attacks location

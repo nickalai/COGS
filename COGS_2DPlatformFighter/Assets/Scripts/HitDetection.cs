@@ -98,6 +98,7 @@ public class HitDetection : MonoBehaviour {
             Debug.Log("Player Grabbed!");
             this.transform.parent.parent = col.transform.parent;
             col.transform.parent.GetComponent<Animator>().SetTrigger("Grab Success");
+            col.transform.parent.GetComponent<Animator>().ResetTrigger("Grab Release");
             anim.SetTrigger("Grabbed");
             col.transform.parent.GetComponent<PlayerStateStack>().Push(Player.PlayerState.GRABBING); //Add Grabbing State to grabber
             pss.Push(Player.PlayerState.GRABBED);

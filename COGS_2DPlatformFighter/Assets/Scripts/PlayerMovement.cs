@@ -43,7 +43,7 @@ public class PlayerMovement : MonoBehaviour {
         RaycastHit2D beamToFloor = Physics2D.Raycast(transform.position, -Vector2.up, 1.3f); //1.294 should be distance to ground, but 1.3f allows leniency to avoid bugs (1.2978 occasionally popped up and prevented flipping)
 
         //Jump if player has jumps left
-        if (Input.GetButtonDown("Jump") && jumpsLeft > 0 && (pss.Peek() == Player.PlayerState.GROUNDED || pss.Peek() == Player.PlayerState.IDLE || pss.Peek() == Player.PlayerState.AERIAL))
+        if (Input.GetButtonDown("Jump") && jumpsLeft > 0 && (anim.GetCurrentAnimatorStateInfo(0).IsName("Movement") || anim.GetCurrentAnimatorStateInfo(0).IsName("Jump")))
         {
             PlayerJump();
             p.isGrounded = false;
@@ -83,7 +83,7 @@ public class PlayerMovement : MonoBehaviour {
                 anim.SetFloat("Move", 0f);
             }
         }
-        else if(pss.Peek() == Player.PlayerState.GRABBED || pss.Peek() == Player.PlayerState.GRABBING) //If you are being grabbed/grabbing, you can't move TODO: If in Grabbed/Grabbing
+        else if(anim.GetCurrentAnimatorStateInfo(0).IsName("Grabbed") || anim.GetCurrentAnimatorStateInfo(0).IsName("Grabbing") || anim.GetCurrentAnimatorStateInfo(0).IsName("Grab")) //If you are being grabbed/grabbing, you can't move 
         {
             horizontalMove = 0;
         }
@@ -137,11 +137,11 @@ public class PlayerMovement : MonoBehaviour {
     void PlayerMove(float horizontalVelocity)
     {
         //Flip the character model if it changes horizontal direction on the ground
-        if(p.facingRight && horizontalVelocity < 0 && anim.GetCurrentAnimatorStateInfo(0).IsName("Movement") && p.isGrounded) //TODO: If in Movement and isGrounded
+        if(p.facingRight && horizontalVelocity < 0 && anim.GetCurrentAnimatorStateInfo(0).IsName("Movement") && p.isGrounded)
         {
             PlayerFlip();
         }
-        else if(!p.facingRight && horizontalVelocity > 0 && anim.GetCurrentAnimatorStateInfo(0).IsName("Movement") && p.isGrounded) //TODO: If in Movement and isGrounded
+        else if(!p.facingRight && horizontalVelocity > 0 && anim.GetCurrentAnimatorStateInfo(0).IsName("Movement") && p.isGrounded)
         {
             PlayerFlip();
         }
