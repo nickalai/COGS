@@ -98,6 +98,7 @@ public class HitDetection : MonoBehaviour {
             col.transform.parent.GetComponent<Animator>().SetTrigger("Grab Success");
             col.transform.parent.GetComponent<Animator>().ResetTrigger("Grab Release");
             anim.SetTrigger("Grabbed");
+            p.rb.simulated = false;
             Invoke("EscapeGrab", 5); //HOW DO CANCEL INVOKE?
             return;
         }
@@ -110,6 +111,7 @@ public class HitDetection : MonoBehaviour {
         {
             this.transform.parent.parent.GetComponent<Animator>().SetTrigger("Grab Release");
             anim.SetTrigger("Grab Escape");
+            p.rb.simulated = true;
             this.transform.parent.parent = null;
             Debug.Log("Player Escaped!");
         }

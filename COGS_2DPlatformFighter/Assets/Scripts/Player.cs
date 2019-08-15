@@ -14,7 +14,7 @@ public class Player : MonoBehaviour {
     public bool isAttacking { get; set; } //Keeping track of whether or not the player is attacking(To prevent multiple attacks at once)
     public int lastHit { get; set; } //int playerNum of last player to hit this one
 
-    private Rigidbody2D rb;
+    public Rigidbody2D rb { get; set; }
     private Animator anim;
 
     public enum PlayerState

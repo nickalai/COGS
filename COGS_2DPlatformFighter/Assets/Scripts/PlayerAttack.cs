@@ -333,6 +333,7 @@ public class PlayerAttack : MonoBehaviour {
     {
         yield return new WaitForEndOfFrame(); //Ensures throw direction
         grabbedPlayer.transform.parent = null;
+        grabbedPlayer.GetComponent<Rigidbody2D>().simulated = true;
         anim.SetTrigger("Grab Release");
         //No need to allow grabbed player to escape since they'll go directly to stagger
     }
