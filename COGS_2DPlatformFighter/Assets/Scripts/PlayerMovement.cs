@@ -47,6 +47,7 @@ public class PlayerMovement : MonoBehaviour {
         {
             PlayerJump();
             pss.SetState(Player.PlayerState.AERIAL);
+            p.isGrounded = false;
         }
         else if (beamToFloor.collider != null) //If you're close to the floor and haven't jumped, you must be grounded.
         {
@@ -60,10 +61,6 @@ public class PlayerMovement : MonoBehaviour {
             hasAirDodged = false;
             jumpsLeft = maxJumps; //When you're grounded, you regain your max jumps
             GetComponent<Player>().lastHit = 0; //When Grounded, lastHit resets
-        }
-        else //If you're not close to the floor and aren't jumping, you must not be grounded
-        {
-            p.isGrounded = false;
         }
 
         //Change player movement based on whether or not player is sprinting/in the air
