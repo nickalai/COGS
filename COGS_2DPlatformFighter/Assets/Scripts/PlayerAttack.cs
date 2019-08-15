@@ -40,7 +40,7 @@ public class PlayerAttack : MonoBehaviour {
 
     [SerializeField] private GameObject projectile;
 
-    private Player pm;
+    private Player p;
     private PlayerStateStack pss;
     private PlayerMovement pmove;
     private BoxCollider2D hitbox;
@@ -65,7 +65,7 @@ public class PlayerAttack : MonoBehaviour {
 
     // Use this for initialization
     void Start() {
-        pm = GetComponent<Player>();
+        p = GetComponent<Player>();
         pss = GetComponent<PlayerStateStack>();
         pmove = GetComponent<PlayerMovement>();
         anim = GetComponent<Animator>();
@@ -73,7 +73,7 @@ public class PlayerAttack : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
-        if(pss.Peek() == Player.PlayerState.GRABBING)
+        if(pss.Peek() == Player.PlayerState.GRABBING) //TODO: If Animation State is Grabbing; ENSURE THIS WORKS EVEN THOUGH LAYER INDEX SHOULDN'T BE 0
         {
             Transform[] transformList = this.GetComponentsInChildren<Transform>();
             GameObject grabbedPlayer = null;
@@ -95,8 +95,8 @@ public class PlayerAttack : MonoBehaviour {
                     {
                         Debug.Log("Up Throw");
                         anim.SetTrigger("UThrow");
-                        pss.Pop(); //Popping Grabbing
-                        grabbedPlayerPss.Pop(); //Popping Grabbed
+                        pss.Pop(); //Popping Grabbing TODO: Add Throw
+                        grabbedPlayerPss.Pop(); //Popping Grabbed TODO: Double Check that stagger appropriately removes Grabbed state
                         grabbedPlayer.GetComponent<Player>().PlayerStagger(UpThrow);
                         StartCoroutine(ReleasePlayer(grabbedPlayer));
                     }
@@ -104,8 +104,8 @@ public class PlayerAttack : MonoBehaviour {
                     {
                         Debug.Log("Down Throw");
                         anim.SetTrigger("DThrow");
-                        pss.Pop(); //Popping Grabbing
-                        grabbedPlayerPss.Pop(); //Popping Grabbed
+                        pss.Pop(); //Popping Grabbing  TODO: Add Throw
+                        grabbedPlayerPss.Pop(); //Popping Grabbed  TODO: Double Check that stagger appropriately removes Grabbed state
                         grabbedPlayer.GetComponent<Player>().PlayerStagger(DownThrow);
                         StartCoroutine(ReleasePlayer(grabbedPlayer));
                     }
@@ -113,12 +113,12 @@ public class PlayerAttack : MonoBehaviour {
                 if (Input.GetButtonDown("Horizontal"))
                 {
                     Attack tempThrow = new Attack(); //Using tempThrow as deep copy to change knockback direction without affecting original
-                    if (Input.GetAxisRaw("Horizontal") > 0 && pm.facingRight || Input.GetAxisRaw("Horizontal") < 0 && !pm.facingRight)
+                    if (Input.GetAxisRaw("Horizontal") > 0 && p.facingRight || Input.GetAxisRaw("Horizontal") < 0 && !p.facingRight)
                     {
                         Debug.Log("Forward Throw");
                         anim.SetTrigger("FThrow");
-                        pss.Pop(); //Popping Grabbing
-                        grabbedPlayerPss.Pop(); //Popping Grabbed
+                        pss.Pop(); //Popping Grabbing TODO: Add Throw
+                        grabbedPlayerPss.Pop(); //Popping Grabbed  TODO: Double Check that stagger appropriately removes Grabbed state
                         tempThrow = ForwardThrow;
                         if (!GetComponent<Player>().facingRight)
                         {
@@ -127,12 +127,12 @@ public class PlayerAttack : MonoBehaviour {
                         grabbedPlayer.GetComponent<Player>().PlayerStagger(tempThrow);
                         StartCoroutine(ReleasePlayer(grabbedPlayer));
                     }
-                    else if (Input.GetAxisRaw("Horizontal") < 0 && pm.facingRight || Input.GetAxisRaw("Horizontal") > 0 && !pm.facingRight)
+                    else if (Input.GetAxisRaw("Horizontal") < 0 && p.facingRight || Input.GetAxisRaw("Horizontal") > 0 && !p.facingRight)
                     {
                         Debug.Log("Back Throw");
                         anim.SetTrigger("BThrow");
-                        pss.Pop(); //Popping Grabbing
-                        grabbedPlayerPss.Pop(); //Popping Grabbed
+                        pss.Pop(); //Popping Grabbing TODO: Add Throw
+                        grabbedPlayerPss.Pop(); //Popping Grabbed TODO: Double Check that stagger appropriately removes Grabbed state
                         tempThrow = BackThrow;
                         if (!GetComponent<Player>().facingRight)
                         {
@@ -149,23 +149,23 @@ public class PlayerAttack : MonoBehaviour {
 
         if (Input.GetButtonDown("Attack")) //As long as they aren't in an animation, pressing attack will launch an attack
         {
-            if (pss.Peek() == Player.PlayerState.GROUNDED || pss.Peek() == Player.PlayerState.IDLE)
+            if (anim.GetCurrentAnimatorStateInfo(0).IsName("Movement") && p.isGrounded)
             {
                 GroundedAttack();
             }
 
-            else if (pss.Peek() == Player.PlayerState.AERIAL)
+            else if (anim.GetCurrentAnimatorStateInfo(0).IsName("Movement") && !p.isGrounded)
             {
                 AerialAttack();
             }
         }
         //You can't make multiple inputs at once, so else-if suite is optimal
-        else if (Input.GetButtonDown("Special") && (pss.Peek() == Player.PlayerState.GROUNDED || pss.Peek() == Player.PlayerState.IDLE || pss.Peek() == Player.PlayerState.AERIAL)) //As long as they aren't in an animation, pressing attack will launch an attack
+        else if (Input.GetButtonDown("Special") && anim.GetCurrentAnimatorStateInfo(0).IsName("Movement")) //As long as they aren't in an animation, pressing attack will launch an attack
         {
             SpecialAttack();
         }
 
-        else if (Input.GetButtonDown("Grab") && (pss.Peek() == Player.PlayerState.GROUNDED || pss.Peek() == Player.PlayerState.IDLE))
+        else if (Input.GetButtonDown("Grab") && anim.GetCurrentAnimatorStateInfo(0).IsName("Movement") && p.isGrounded)
         {
             StartCoroutine(GrabPlayer());            
         }
@@ -183,19 +183,17 @@ public class PlayerAttack : MonoBehaviour {
     //Nic's Edit: All attack functions call this as a coroutine with hitboxes and delay as parameters
     IEnumerator AttackCalled(Attack attack)
     {
-        pss.Push(Player.PlayerState.ATTACKING);
         CircleCollider2D hitbox = attack.hitbox.GetComponent<CircleCollider2D>();
         hitbox.enabled = true;
         yield return new WaitForSeconds(attack.attackTime); //TODO: Have this wait until the attack's respective animation is over
         hitbox.enabled = false;
-        pss.Pop(); //ERROR HANDLING: WHAT IF THEY'RE STAGGERED?  THIS WOULD NO LONGER POP THE ATTACK, BUT IT WOULD POP THE STAGGER, Unless Stagger is implemented to always be position 1 (and not 0).  That way, stagger would overrule attacks
     }
 
     //Function for ground attacks
     void GroundedAttack()
     {
         //Btilt isn't a thing, can only be executed by turning around and ftilting.
-        if (Input.GetAxisRaw("Horizontal") < 0 && !pm.facingRight || Input.GetAxisRaw("Horizontal") > 0 && pm.facingRight) //Ftilt
+        if (Input.GetAxisRaw("Horizontal") < 0 && !p.facingRight || Input.GetAxisRaw("Horizontal") > 0 && p.facingRight) //Ftilt
         {
             anim.SetTrigger("Ftilt");
             StartCoroutine(AttackCalled(Ftilt));
@@ -221,12 +219,12 @@ public class PlayerAttack : MonoBehaviour {
     //Function for aerial attack
     void AerialAttack()
     {
-        if (Input.GetAxisRaw("Horizontal") < 0 && pm.facingRight || Input.GetAxisRaw("Horizontal") > 0 && !pm.facingRight) //Backair
+        if (Input.GetAxisRaw("Horizontal") < 0 && p.facingRight || Input.GetAxisRaw("Horizontal") > 0 && !p.facingRight) //Backair
         {
             anim.SetTrigger("Bair");
             StartCoroutine(AttackCalled(Bair));
         }
-        else if (Input.GetAxisRaw("Horizontal") < 0 && !pm.facingRight || Input.GetAxisRaw("Horizontal") > 0 && pm.facingRight) //Fair
+        else if (Input.GetAxisRaw("Horizontal") < 0 && !p.facingRight || Input.GetAxisRaw("Horizontal") > 0 && p.facingRight) //Fair
         {
             anim.SetTrigger("Fair");
             StartCoroutine(AttackCalled(Fair));
@@ -253,7 +251,7 @@ public class PlayerAttack : MonoBehaviour {
     void SpecialAttack()
     {
         //Need backwards side special for when you're moving in the air and using a side special (It needs to flip you)
-        if (Input.GetAxisRaw("Horizontal") < 0 && pm.facingRight || Input.GetAxisRaw("Horizontal") > 0 && !pm.facingRight) //Side Special (Backwards)
+        if (Input.GetAxisRaw("Horizontal") < 0 && p.facingRight || Input.GetAxisRaw("Horizontal") > 0 && !p.facingRight) //Side Special (Backwards)
         {
             pmove.PlayerFlip(); //Need to flip them if they're facing backwards
             //Aerial Special
@@ -261,10 +259,10 @@ public class PlayerAttack : MonoBehaviour {
             StartCoroutine(SpawnProjectile(FASpecial, FASpecialDirection)); //Flipped FASpecial direction
             //Can't possibly be grounded
         }
-        else if (Input.GetAxisRaw("Horizontal") < 0 && !pm.facingRight || Input.GetAxisRaw("Horizontal") > 0 && pm.facingRight) //Side Special (Forwards)
+        else if (Input.GetAxisRaw("Horizontal") < 0 && !p.facingRight || Input.GetAxisRaw("Horizontal") > 0 && p.facingRight) //Side Special (Forwards)
         {
 
-            if (pss.Peek() == Player.PlayerState.AERIAL)
+            if (!p.isGrounded)
             {
                 //Aerial Special
                 anim.SetTrigger("FASpecial");
@@ -281,7 +279,7 @@ public class PlayerAttack : MonoBehaviour {
         else if (Input.GetAxisRaw("Vertical") > 0) //Up Special
         {
 
-            if (pss.Peek() == Player.PlayerState.AERIAL)
+            if (!p.isGrounded)
             {
                 //Aerial Special
                 anim.SetTrigger("UASpecial");
@@ -298,7 +296,7 @@ public class PlayerAttack : MonoBehaviour {
         else if (Input.GetAxisRaw("Vertical") < 0) //Down Special
         {
 
-            if (pss.Peek() == Player.PlayerState.AERIAL)
+            if (!p.isGrounded)
             {
                 //Aerial Special
                 anim.SetTrigger("DASpecial");
@@ -317,7 +315,7 @@ public class PlayerAttack : MonoBehaviour {
             Debug.Log("Neutral Special");
             //TODO: Implement Neutral special
 
-            if (pss.Peek() == Player.PlayerState.AERIAL)
+            if (!p.isGrounded)
             {
                 //Aerial Special
             }
@@ -353,15 +351,13 @@ public class PlayerAttack : MonoBehaviour {
     //Spawns a Projectile at the given Attacks location
     IEnumerator SpawnProjectile(Attack specialAttack, Vector2 direction)
     {
-        pss.Push(Player.PlayerState.ATTACKING);
-
         GameObject projectileClone = Instantiate(projectile);
         projectileClone.GetComponent<ProjectileScript>().shooter = this.gameObject;
         projectileClone.transform.position = specialAttack.hitbox.transform.position;
 
         Rigidbody2D rb = projectileClone.GetComponent<Rigidbody2D>();
 
-        if (pm.facingRight) //If they're not facing right, everything is flipped!
+        if (p.facingRight) //If they're not facing right, everything is flipped!
         {
             rb.velocity = direction * projectileSpeed;
         }
@@ -371,9 +367,6 @@ public class PlayerAttack : MonoBehaviour {
         }
 
         yield return new WaitForSeconds(specialAttack.attackTime);
-
-        pss.Pop(); //ERROR HANDLING: WHAT IF THEY'RE STAGGERED?  THIS WOULD NO LONGER POP THE ATTACK, BUT IT WOULD POP THE STAGGER, Unless Stagger is implemented to always be position 1 (and not 0).  That way, stagger would overrule attacks.  But then the coroutine would have to be interrupted to prevent a pre-emptive pop
-
 
     }
 }

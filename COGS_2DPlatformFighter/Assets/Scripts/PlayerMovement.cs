@@ -46,7 +46,6 @@ public class PlayerMovement : MonoBehaviour {
         if (Input.GetButtonDown("Jump") && jumpsLeft > 0 && (pss.Peek() == Player.PlayerState.GROUNDED || pss.Peek() == Player.PlayerState.IDLE || pss.Peek() == Player.PlayerState.AERIAL))
         {
             PlayerJump();
-            pss.SetState(Player.PlayerState.AERIAL);
             p.isGrounded = false;
         }
         else if (beamToFloor.collider != null) //If you're close to the floor and haven't jumped, you must be grounded.
@@ -56,7 +55,6 @@ public class PlayerMovement : MonoBehaviour {
                 anim.SetTrigger("Land-Cancel");
             }
             p.isGrounded = true;
-            pss.SetState(Player.PlayerState.GROUNDED);
             isFastFalling = false;
             hasAirDodged = false;
             jumpsLeft = maxJumps; //When you're grounded, you regain your max jumps
@@ -64,7 +62,7 @@ public class PlayerMovement : MonoBehaviour {
         }
 
         //Change player movement based on whether or not player is sprinting/in the air
-        if(pss.Peek() == Player.PlayerState.GROUNDED)
+        if(anim.GetCurrentAnimatorStateInfo(0).IsName("Movement") && p.isGrounded)
         {
             if(Mathf.Abs(Input.GetAxisRaw("Horizontal")) > 0.1)
             {
@@ -85,17 +83,16 @@ public class PlayerMovement : MonoBehaviour {
                 anim.SetFloat("Move", 0f);
             }
         }
-        else if(pss.Peek() == Player.PlayerState.GRABBED || pss.Peek() == Player.PlayerState.GRABBING) //If you are being grabbed/grabbing, you can't move
+        else if(pss.Peek() == Player.PlayerState.GRABBED || pss.Peek() == Player.PlayerState.GRABBING) //If you are being grabbed/grabbing, you can't move TODO: If in Grabbed/Grabbing
         {
             horizontalMove = 0;
         }
         else //If you're not being grabbed or grabbing, you can move
         {
             //TODO: Implement a falling animation
-            //anim.SetTrigger("Falling");
             horizontalMove = Input.GetAxisRaw("Horizontal") * airSpeed;
             //If you're in the air and press down after/at the peak of your jump, you fast fall
-            if (pss.Peek() == Player.PlayerState.AERIAL)
+            if (anim.GetCurrentAnimatorStateInfo(0).IsName("Movement") && !p.isGrounded)
             {
                 if (Input.GetButtonDown("Vertical") && Input.GetAxisRaw("Vertical") < 0 && rb.velocity.y <= 0 && !isFastFalling)
                 {
@@ -110,7 +107,7 @@ public class PlayerMovement : MonoBehaviour {
         PlayerMove(horizontalMove);
         
         //If the player is on the ground (GROUNDED or IDLE), they can dodge roll/spot dodge
-        if(Input.GetButtonDown("Dodge") && (pss.Peek() == Player.PlayerState.IDLE || pss.Peek() == Player.PlayerState.GROUNDED))
+        if(Input.GetButtonDown("Dodge") && anim.GetCurrentAnimatorStateInfo(0).IsName("Movement") && p.isGrounded)
         {
             if(Input.GetAxisRaw("Vertical") < 0)
             {
@@ -122,7 +119,7 @@ public class PlayerMovement : MonoBehaviour {
             }
         }
         //If they're in the air and try to air dodge, they do unless they already have
-        else if (Input.GetButtonDown("Dodge") && pss.Peek() == Player.PlayerState.AERIAL && !hasAirDodged) 
+        else if (Input.GetButtonDown("Dodge") && anim.GetCurrentAnimatorStateInfo(0).IsName("Movement") && !p.isGrounded && !hasAirDodged)
         {
             StartCoroutine(PlayerAirDodge());
         }
@@ -140,11 +137,11 @@ public class PlayerMovement : MonoBehaviour {
     void PlayerMove(float horizontalVelocity)
     {
         //Flip the character model if it changes horizontal direction on the ground
-        if(p.facingRight && horizontalVelocity < 0 && (pss.Peek() == Player.PlayerState.GROUNDED))
+        if(p.facingRight && horizontalVelocity < 0 && anim.GetCurrentAnimatorStateInfo(0).IsName("Movement") && p.isGrounded) //TODO: If in Movement and isGrounded
         {
             PlayerFlip();
         }
-        else if(!p.facingRight && horizontalVelocity > 0 && (pss.Peek() == Player.PlayerState.GROUNDED))
+        else if(!p.facingRight && horizontalVelocity > 0 && anim.GetCurrentAnimatorStateInfo(0).IsName("Movement") && p.isGrounded) //TODO: If in Movement and isGrounded
         {
             PlayerFlip();
         }
@@ -177,7 +174,6 @@ public class PlayerMovement : MonoBehaviour {
     IEnumerator PlayerDodgeRoll() //IEnumerator for waitForSeconds()
     {
         anim.SetTrigger("Dodge Roll");
-        pss.Push(Player.PlayerState.DODGING);
         p.hitbox.enabled = false; //Disabling boxCollider hitbox
         if(p.facingRight)
         {
@@ -188,7 +184,6 @@ public class PlayerMovement : MonoBehaviour {
             rb.AddForce(new Vector2(rollForce * -1, 0f));
         }
         yield return new WaitForSeconds(dodgeRollLength); //TODO: Replace dodgeRollLength with a wait until no longer in dodge roll state
-        pss.Pop(); //Since GROUNDED is set via SetState and we've disabled the hitbox, there's no way that this Pop could be anything except the DODGING we just pushed.
         p.hitbox.enabled = true; //Re-enabling boxCollider hitbox
     }
 
@@ -196,10 +191,8 @@ public class PlayerMovement : MonoBehaviour {
     IEnumerator PlayerSpotDodge() //IEnumerator for waitForSeconds()
     {
         anim.SetTrigger("Spot Dodge");
-        pss.Push(Player.PlayerState.DODGING);
         p.hitbox.enabled = false; //Disabling boxCollider hitbox
         yield return new WaitForSeconds(spotDodgeLength); //TODO: Replace spotDodgeLength with a wait until no longer in spot dodge state
-        pss.Pop();
         p.hitbox.enabled = true; //Re-enabling boxCollider hitbox
     }
 
@@ -207,7 +200,6 @@ public class PlayerMovement : MonoBehaviour {
     IEnumerator PlayerAirDodge()
     {
         //Air Dodge
-        pss.Push(Player.PlayerState.SLIDING); //SLIDING = Air Slide = Air Dodge
         hasAirDodged = true;
         p.hitbox.enabled = false; //Disabling boxCollider hitbox
 
@@ -225,7 +217,6 @@ public class PlayerMovement : MonoBehaviour {
         rb.AddForce(new Vector2(Input.GetAxisRaw("Horizontal") * airDodgeForce, Input.GetAxisRaw("Vertical") * airDodgeForce));
 
         yield return new WaitForSeconds(airDodgeLength);
-        pss.Pop();
         p.hitbox.enabled = true; //Re-enabling boxCollider hitbox
 
     }
