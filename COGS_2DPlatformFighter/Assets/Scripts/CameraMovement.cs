@@ -26,7 +26,7 @@ public class CameraMovement : MonoBehaviour {
     private void Awake()
     {
         transform = GetComponent<Transform>();
-        cam = GetComponent<Camera>();
+        cam = GetComponent<Camera>();  
     }
 
 
@@ -34,17 +34,13 @@ public class CameraMovement : MonoBehaviour {
     {
         gameManager = GameObject.Find("GameManager");
         gm = gameManager.GetComponent<GameManager>();
+        SetPlayerList();
     }
 	
 
 	private void Update ()
     {
-        playerTransforms = new List<Transform>();
-        for (int i = 0; i < gm.players.Length; i++)
-        {
-            playerTransforms.Add(gm.players[i].GetComponent<Transform>());
-        }
-
+        SetPlayerList();
         CalculateTransform();
         CalculateSize();
         ClampPosition(MinXAndY, MaxXAndY);
@@ -71,11 +67,6 @@ public class CameraMovement : MonoBehaviour {
     //Method to find largest and lowest x and y values
     private void CalculateTransform()
     {
-        if (playerTransforms.Count <= 0) //Does not run to completion if no players have been found
-        {
-            return;
-        }
-
         desiredPos = Vector3.zero;
         float distance = 0f;
 
@@ -108,9 +99,10 @@ public class CameraMovement : MonoBehaviour {
         float maxDifX = GetMaxX();
         float maxDifY = GetMaxY();
 
+
         if (maxDifX >= maxDifY)
         {
-            cam.orthographicSize = (maxDifX / 3);
+            cam.orthographicSize = (maxDifX / 2) + 3;
         }
         else if (maxDifY > maxDifX)
         {
@@ -149,5 +141,15 @@ public class CameraMovement : MonoBehaviour {
         clampedValues.y = Mathf.Clamp(transform.position.y, MinXAndY.y, MaxXAndY.y);
 
         transform.position = clampedValues;
+    }
+
+    //Grabs the transforms of the player's and puts it in a list
+    private void SetPlayerList()
+    {
+        playerTransforms = new List<Transform>();
+        for (int i = 0; i < gm.players.Length; i++)
+        {
+            playerTransforms.Add(gm.players[i].GetComponent<Transform>());
+        }
     }
 }
