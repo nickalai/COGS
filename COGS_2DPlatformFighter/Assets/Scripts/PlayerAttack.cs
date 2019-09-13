@@ -347,6 +347,11 @@ public class PlayerAttack : MonoBehaviour {
     //Spawns a Projectile at the given Attacks location
     IEnumerator SpawnProjectile(Attack specialAttack, Vector2 direction)
     {
+        for (int frameCount = specialAttack.hitFrame; frameCount > 1; --frameCount)
+        {
+            --frameCount;
+            yield return new WaitForEndOfFrame();
+        }
         GameObject projectileClone = Instantiate(projectile);
         projectileClone.GetComponent<ProjectileScript>().shooter = this.gameObject;
         projectileClone.transform.position = specialAttack.hitbox.transform.position;
