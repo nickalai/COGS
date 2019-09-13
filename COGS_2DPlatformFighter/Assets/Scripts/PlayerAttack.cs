@@ -7,6 +7,7 @@ public class PlayerAttack : MonoBehaviour {
     [System.Serializable] public struct Attack
     {
         public GameObject hitbox; //For melee: where attacks will hit.  For projectile: where projectiles will spawn
+        public int hitFrame; //Frame that attack actually 
         public float attackTime;  //How long each attack takes(aka how long until you can attack again)
         public int attackDamage;
         public float knockbackAmount;
@@ -173,6 +174,11 @@ public class PlayerAttack : MonoBehaviour {
     IEnumerator AttackCalled(Attack attack)
     {
         CircleCollider2D hitbox = attack.hitbox.GetComponent<CircleCollider2D>();
+        for (int frameCount = attack.hitFrame;  frameCount > 1; --frameCount)
+        {
+            --frameCount;
+            yield return new WaitForEndOfFrame();   
+        }
         hitbox.enabled = true;
         yield return new WaitForSeconds(attack.attackTime); //TODO: Have this wait until the attack's respective animation is over
         hitbox.enabled = false;
