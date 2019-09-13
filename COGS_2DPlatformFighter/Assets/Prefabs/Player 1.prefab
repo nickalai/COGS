@@ -830,6 +830,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Bair:
     hitbox: {fileID: 1298792939446014}
+    hitFrame: 0
     attackTime: 0.2
     attackDamage: 5
     knockbackAmount: 500
@@ -837,6 +838,7 @@ MonoBehaviour:
     name: Bair
   Fair:
     hitbox: {fileID: 1596903478374976}
+    hitFrame: 0
     attackTime: 0.2
     attackDamage: 5
     knockbackAmount: 500
@@ -844,6 +846,7 @@ MonoBehaviour:
     name: Fair
   Uair:
     hitbox: {fileID: 1940659109430144}
+    hitFrame: 0
     attackTime: 0.2
     attackDamage: 5
     knockbackAmount: 500
@@ -851,6 +854,7 @@ MonoBehaviour:
     name: Uair
   Dair:
     hitbox: {fileID: 1546135754920592}
+    hitFrame: 0
     attackTime: 0.2
     attackDamage: 5
     knockbackAmount: 500
@@ -858,6 +862,7 @@ MonoBehaviour:
     name: Dair
   Nair:
     hitbox: {fileID: 1222218246035116}
+    hitFrame: 0
     attackTime: 0.2
     attackDamage: 5
     knockbackAmount: 500
@@ -865,6 +870,7 @@ MonoBehaviour:
     name: Nair
   Ftilt:
     hitbox: {fileID: 1095836322253356}
+    hitFrame: 30
     attackTime: 0.2
     attackDamage: 5
     knockbackAmount: 500
@@ -872,6 +878,7 @@ MonoBehaviour:
     name: Ftilt
   Utilt:
     hitbox: {fileID: 1343179894286296}
+    hitFrame: 10
     attackTime: 0.2
     attackDamage: 5
     knockbackAmount: 500
@@ -879,6 +886,7 @@ MonoBehaviour:
     name: Utilt
   Dtilt:
     hitbox: {fileID: 1458229779026806}
+    hitFrame: 0
     attackTime: 0.2
     attackDamage: 5
     knockbackAmount: 500
@@ -886,6 +894,7 @@ MonoBehaviour:
     name: Dtilt
   Jab:
     hitbox: {fileID: 1702424861964630}
+    hitFrame: 10
     attackTime: 0.2
     attackDamage: 5
     knockbackAmount: 500
@@ -893,6 +902,7 @@ MonoBehaviour:
     name: Jab
   FSpecial:
     hitbox: {fileID: 1700408389926586}
+    hitFrame: 30
     attackTime: 0.4
     attackDamage: 0
     knockbackAmount: 500
@@ -900,6 +910,7 @@ MonoBehaviour:
     name: FSpecial
   USpecial:
     hitbox: {fileID: 1327404127000536}
+    hitFrame: 30
     attackTime: 0.4
     attackDamage: 0
     knockbackAmount: 0
@@ -907,6 +918,7 @@ MonoBehaviour:
     name: USpecial
   DSpecial:
     hitbox: {fileID: 1117627324770948}
+    hitFrame: 30
     attackTime: 0.4
     attackDamage: 0
     knockbackAmount: 0
@@ -914,6 +926,7 @@ MonoBehaviour:
     name: DSpecial
   FASpecial:
     hitbox: {fileID: 1750744820027532}
+    hitFrame: 30
     attackTime: 0.4
     attackDamage: 0
     knockbackAmount: 0
@@ -921,6 +934,7 @@ MonoBehaviour:
     name: FASpecial
   UASpecial:
     hitbox: {fileID: 1858411150822900}
+    hitFrame: 0
     attackTime: 0.4
     attackDamage: 0
     knockbackAmount: 0
@@ -928,6 +942,7 @@ MonoBehaviour:
     name: 
   DASpecial:
     hitbox: {fileID: 1450228903337022}
+    hitFrame: 30
     attackTime: 0.4
     attackDamage: 0
     knockbackAmount: 0
@@ -936,6 +951,7 @@ MonoBehaviour:
   Grab: {fileID: 1853049542988332}
   ForwardThrow:
     hitbox: {fileID: 1853049542988332}
+    hitFrame: 0
     attackTime: 0
     attackDamage: 5
     knockbackAmount: 500
@@ -943,6 +959,7 @@ MonoBehaviour:
     name: Forward Throw
   UpThrow:
     hitbox: {fileID: 1853049542988332}
+    hitFrame: 0
     attackTime: 0
     attackDamage: 5
     knockbackAmount: 500
@@ -950,6 +967,7 @@ MonoBehaviour:
     name: Up Throw
   DownThrow:
     hitbox: {fileID: 1853049542988332}
+    hitFrame: 0
     attackTime: 0
     attackDamage: 5
     knockbackAmount: 500
@@ -957,6 +975,7 @@ MonoBehaviour:
     name: Down Throw
   BackThrow:
     hitbox: {fileID: 1853049542988332}
+    hitFrame: 0
     attackTime: 0
     attackDamage: 5
     knockbackAmount: 500
