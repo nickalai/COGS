@@ -727,9 +727,8 @@ MonoBehaviour:
     type: 2}
   player2Prefab: {fileID: 1545557865880224, guid: 7b479afd56bce07448e1d505b08931b6,
     type: 2}
+  players: []
   gamemode: 0
-  player1Score: 0
-  player2Score: 0
 --- !u!1 &2007420161
 GameObject:
   m_ObjectHideFlags: 0
