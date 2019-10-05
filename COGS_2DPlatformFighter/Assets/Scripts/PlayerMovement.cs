@@ -38,8 +38,7 @@ public class PlayerMovement : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-        RaycastHit2D beamToFloor = Physics2D.Raycast(transform.position, -Vector2.up, 1.3f); //1.294 should be distance to ground, but 1.3f allows leniency to avoid bugs (1.2978 occasionally popped up and prevented flipping)
-
+        RaycastHit2D beamToFloor = Physics2D.Raycast(transform.position, -Vector2.up, 1.91f); //1.905 should be distance to ground, but 1.91 allows leniency to avoid bugs (outliers occasionally popped up and prevented flipping)
         //Jump if player has jumps left
         if (Input.GetButtonDown("Jump") && jumpsLeft > 0 && (anim.GetCurrentAnimatorStateInfo(0).IsName("Movement") || anim.GetCurrentAnimatorStateInfo(0).IsName("Jump")))
         {
