@@ -94,7 +94,7 @@ public class PlayerMovement : MonoBehaviour {
             //TODO: Implement a falling animation
             horizontalMove = Input.GetAxisRaw("Horizontal") * airSpeed;
             //If you're in the air and press down after/at the peak of your jump, you fast fall
-            if (anim.GetCurrentAnimatorStateInfo(0).IsName("Movement") && !p.isGrounded)
+            if ((anim.GetCurrentAnimatorStateInfo(0).IsName("Movement") || anim.GetCurrentAnimatorStateInfo(0).IsName("Jump")) && !p.isGrounded)
             {
                 if (Input.GetButtonDown("Vertical") && Input.GetAxisRaw("Vertical") < 0 && rb.velocity.y <= 0 && !isFastFalling)
                 {
@@ -120,7 +120,7 @@ public class PlayerMovement : MonoBehaviour {
             }
         }
         //If they're in the air and try to air dodge, they do unless they already have
-        else if (Input.GetButtonDown("Dodge") && anim.GetCurrentAnimatorStateInfo(0).IsName("Movement") && !p.isGrounded && !hasAirDodged)
+        else if (Input.GetButtonDown("Dodge") && (anim.GetCurrentAnimatorStateInfo(0).IsName("Movement") || anim.GetCurrentAnimatorStateInfo(0).IsName("Jump")) && !p.isGrounded && !hasAirDodged)
         {
             StartCoroutine(PlayerAirDodge());
         }

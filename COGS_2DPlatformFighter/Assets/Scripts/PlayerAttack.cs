@@ -144,13 +144,13 @@ public class PlayerAttack : MonoBehaviour {
                 GroundedAttack();
             }
 
-            else if (anim.GetCurrentAnimatorStateInfo(0).IsName("Movement") && !p.isGrounded)
+            else if ((anim.GetCurrentAnimatorStateInfo(0).IsName("Movement") || anim.GetCurrentAnimatorStateInfo(0).IsName("Jump")) && !p.isGrounded)
             {
                 AerialAttack();
             }
         }
         //You can't make multiple inputs at once, so else-if suite is optimal
-        else if (Input.GetButtonDown("Special") && anim.GetCurrentAnimatorStateInfo(0).IsName("Movement")) //As long as they aren't in an animation, pressing attack will launch an attack
+        else if (Input.GetButtonDown("Special") && (anim.GetCurrentAnimatorStateInfo(0).IsName("Movement") || anim.GetCurrentAnimatorStateInfo(0).IsName("Jump"))) //As long as they aren't in an animation other than jump, pressing attack will launch an attack
         {
             SpecialAttack();
         }
