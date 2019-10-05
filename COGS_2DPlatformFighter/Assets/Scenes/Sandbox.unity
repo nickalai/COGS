@@ -9401,9 +9401,89 @@ Prefab:
       propertyPath: m_RootOrder
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 114525743684979214, guid: 1072618cb37363448b5172e5fc225cc1,
+        type: 2}
+      propertyPath: Bair.hitbox
+      value: 
+      objectReference: {fileID: 1827786317}
+    - target: {fileID: 114525743684979214, guid: 1072618cb37363448b5172e5fc225cc1,
+        type: 2}
+      propertyPath: Fair.hitbox
+      value: 
+      objectReference: {fileID: 1827786317}
+    - target: {fileID: 114525743684979214, guid: 1072618cb37363448b5172e5fc225cc1,
+        type: 2}
+      propertyPath: Dair.hitbox
+      value: 
+      objectReference: {fileID: 1827786317}
+    - target: {fileID: 114525743684979214, guid: 1072618cb37363448b5172e5fc225cc1,
+        type: 2}
+      propertyPath: Nair.hitbox
+      value: 
+      objectReference: {fileID: 1827786317}
+    - target: {fileID: 114525743684979214, guid: 1072618cb37363448b5172e5fc225cc1,
+        type: 2}
+      propertyPath: Bair.knockbackDirection.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114525743684979214, guid: 1072618cb37363448b5172e5fc225cc1,
+        type: 2}
+      propertyPath: Uair.knockbackDirection.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114525743684979214, guid: 1072618cb37363448b5172e5fc225cc1,
+        type: 2}
+      propertyPath: Uair.knockbackDirection.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114525743684979214, guid: 1072618cb37363448b5172e5fc225cc1,
+        type: 2}
+      propertyPath: Dair.knockbackDirection.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114525743684979214, guid: 1072618cb37363448b5172e5fc225cc1,
+        type: 2}
+      propertyPath: Dair.knockbackDirection.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114525743684979214, guid: 1072618cb37363448b5172e5fc225cc1,
+        type: 2}
+      propertyPath: Nair.knockbackDirection.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114525743684979214, guid: 1072618cb37363448b5172e5fc225cc1,
+        type: 2}
+      propertyPath: Nair.knockbackDirection.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114525743684979214, guid: 1072618cb37363448b5172e5fc225cc1,
+        type: 2}
+      propertyPath: Dtilt.hitbox
+      value: 
+      objectReference: {fileID: 1827786316}
+    - target: {fileID: 114525743684979214, guid: 1072618cb37363448b5172e5fc225cc1,
+        type: 2}
+      propertyPath: Dtilt.knockbackDirection.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114525743684979214, guid: 1072618cb37363448b5172e5fc225cc1,
+        type: 2}
+      propertyPath: Dtilt.knockbackDirection.y
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1072618cb37363448b5172e5fc225cc1, type: 2}
   m_IsPrefabAsset: 0
+--- !u!1 &1827786316 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1702424861964630, guid: 1072618cb37363448b5172e5fc225cc1,
+    type: 2}
+  m_PrefabInternal: {fileID: 1827786315}
+--- !u!1 &1827786317 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1940659109430144, guid: 1072618cb37363448b5172e5fc225cc1,
+    type: 2}
+  m_PrefabInternal: {fileID: 1827786315}
 --- !u!1 &1856714051
 GameObject:
   m_ObjectHideFlags: 0

@@ -200,11 +200,8 @@ public class PlayerAttack : MonoBehaviour {
         }
         else if (Input.GetAxisRaw("Vertical") < 0) //Dtilt
         {
-            //NOTE: Disabled Down Tilt due to lack of anim and replaces with Jab for functionality
-            //anim.SetTrigger("Dtilt");
-            //StartCoroutine(AttackCalled(Dtilt));
-            anim.SetTrigger("Jab");
-            StartCoroutine(AttackCalled(Jab));
+            anim.SetTrigger("Dtilt");
+            StartCoroutine(AttackCalled(Dtilt));
         }
         else //Jab if attack is called and no directional attack is selected
         {
@@ -217,8 +214,6 @@ public class PlayerAttack : MonoBehaviour {
     //Function for aerial attack
     void AerialAttack()
     {
-        //NOTE: Since there are no anims for aerial attacks other than Uair, all aerial attacks are uair.
-        /*
         if (Input.GetAxisRaw("Horizontal") < 0 && p.facingRight || Input.GetAxisRaw("Horizontal") > 0 && !p.facingRight) //Backair
         {
             anim.SetTrigger("Bair");
@@ -243,9 +238,7 @@ public class PlayerAttack : MonoBehaviour {
         {
             anim.SetTrigger("Nair");
             StartCoroutine(AttackCalled(Nair));
-        }*/
-        anim.SetTrigger("Uair");
-        StartCoroutine(AttackCalled(Uair));
+        }
     }
 
     //Function for special attack
