@@ -68,6 +68,10 @@ public class Player : MonoBehaviour {
         {
             lastHit = attack.hitbox.GetComponent<ProjectileScript>().shooter.GetComponent<Player>().playerNum;
         }
+        else if(attack.hitbox.tag.Equals("Hazard"))
+        {
+            //Do nothing with the last hit variable
+        }
         else
         {
             lastHit = attack.hitbox.transform.parent.gameObject.GetComponent<Player>().playerNum;

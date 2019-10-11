@@ -10,6 +10,7 @@ TagManager:
   - BlastZone
   - Projectile
   - Attack
+  - Hazard
   layers:
   - Default
   - TransparentFX
