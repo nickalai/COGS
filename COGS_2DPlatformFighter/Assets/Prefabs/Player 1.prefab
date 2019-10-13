@@ -970,7 +970,7 @@ MonoBehaviour:
     knockbackDirection: {x: -1, y: 0}
     name: Back Throw
   projectile: {fileID: 1842984726651662, guid: 7d5f03f233354bd46b41aa6260568651, type: 2}
-  projectileSpeed: 10
+  projectileSpeed: 20
   projectileKnockback: 500
   projectileDamage: 5
 --- !u!114 &114616412027267786

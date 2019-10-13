@@ -335,7 +335,7 @@ MonoBehaviour:
     knockbackDirection: {x: 0, y: 0}
     name: 
   projectile: {fileID: 0}
-  projectileSpeed: 10
+  projectileSpeed: 20
   projectileKnockback: 500
   projectileDamage: 5
 --- !u!114 &114610392891411730

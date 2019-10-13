@@ -48,8 +48,14 @@ public class Player : MonoBehaviour {
         //Physics2D.IgnoreLayerCollision(2, 2, true); //Ignore layer collision between Ignore Raycast Layers (What I currently have the players on)
     }
 
-    public void PlayerStagger(Collider2D col) //PlayerStagger for all cases beyond player attacks
+    public void PlayerStagger(Collider2D col) //PlayerStagger for all cases beyond player attacks NOTE: sHOULD NOT BE USED
     {
+        if (anim.GetCurrentAnimatorStateInfo(0).IsName("Grabbing Ledge"))
+        {
+            //Undo code for ledge grab
+            anim.SetBool("CanLandCancel", true);
+            rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+        }
         //TODO: Replace Set Damage with Attack Specific Damages
         Debug.Log("5 Damage Dealt by " + col.name);
         GameManager.Instance.PlayerDamage(playerNum, 5);
@@ -60,7 +66,13 @@ public class Player : MonoBehaviour {
 
     public void PlayerStagger(PlayerAttack.Attack attack) //PlayerStagger for all player attacks
     {
-        Debug.Log(attack.attackDamage + " Damage Dealt by " + attack.name);
+        if (anim.GetCurrentAnimatorStateInfo(0).IsName("Grabbing Ledge"))
+        {
+            //Undo code for ledge grab
+            anim.SetBool("CanLandCancel", true);
+            rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+        }
+            Debug.Log(attack.attackDamage + " Damage Dealt by " + attack.name);
         GameManager.Instance.PlayerDamage(playerNum, attack.attackDamage);
         rb.AddForceAtPosition(CalculateKnockback(attack.knockbackDirection, attack.knockbackAmount), attack.hitbox.transform.position);
         anim.SetTrigger("Stagger");
