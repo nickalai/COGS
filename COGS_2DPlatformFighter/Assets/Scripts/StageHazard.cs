@@ -17,17 +17,17 @@ public class StageHazard : MonoBehaviour
 		
 	}
 
-    private void OnTriggerEnter2D(Collider2D collider)
+    private void OnTriggerEnter2D(Collider2D col)
     {
-        if (collider.CompareTag("Player"))
+        if (col.CompareTag("Player"))
         {
-            if (collider.GetComponent<Player>().playerDamage >= 125)
+            if (col.GetComponent<Player>().playerDamage >= 125)
             {
-                GameManager.Instance.PlayerKill(collider.GetComponent<Player>().playerNum);
+                GameManager.Instance.PlayerKill(col.GetComponent<Player>().playerNum);
             }
             else
             {
-                collider.GetComponent<Player>().PlayerStagger(hazard);
+                col.GetComponent<Player>().PlayerStagger(hazard);
             }
         }
     }

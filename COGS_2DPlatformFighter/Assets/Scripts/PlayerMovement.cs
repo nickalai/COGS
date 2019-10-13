@@ -8,14 +8,14 @@ public class PlayerMovement : MonoBehaviour {
     [SerializeField] private float runSpeed = 15f; //The speed at which the player runs
     [SerializeField] private float jumpForce = 500f; //The force applied on player jump
     [SerializeField] private float airSpeed = 10f; //The speed at which the player moves through the air
-    [SerializeField] private short maxJumps = 2; //The max number of jumps players have
+    public short maxJumps = 2; //The max number of jumps players have
 
     private Player p;
     private Animator anim;
 
     private float smoothTime = 0.2f; //Internal smoothing value used for SmoothDamp
     private float horizontalMove; //The current velocity of the player
-    private short jumpsLeft; //How many jumps the player has left
+    public short jumpsLeft { get; set; } //How many jumps the player has left
     private Rigidbody2D rb; //The Rigidbody2D on the player character
     private Vector2 smoothingVelocity = Vector2.zero; //Internal Vector2 to be used as ref parameter for SmoothDamp
 
@@ -40,10 +40,22 @@ public class PlayerMovement : MonoBehaviour {
 
         RaycastHit2D beamToFloor = Physics2D.Raycast(transform.position, -Vector2.up, 1.91f); //1.905 should be distance to ground, but 1.91 allows leniency to avoid bugs (outliers occasionally popped up and prevented flipping)
         //Jump if player has jumps left
-        if (Input.GetButtonDown("Jump") && jumpsLeft > 0 && (anim.GetCurrentAnimatorStateInfo(0).IsName("Movement") || anim.GetCurrentAnimatorStateInfo(0).IsName("Jump")))
+        if (Input.GetButtonDown("Jump") && jumpsLeft > 0)
         {
-            PlayerJump();
-            p.isGrounded = false;
+            if(anim.GetCurrentAnimatorStateInfo(0).IsName("Movement") || anim.GetCurrentAnimatorStateInfo(0).IsName("Jump"))
+            {
+                PlayerJump();
+                p.isGrounded = false;
+            }
+            else if(anim.GetCurrentAnimatorStateInfo(0).IsName("Grabbing Ledge"))
+            {
+                //Undo code for ledge grab
+                anim.SetBool("CanLandCancel", true);
+                rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+
+                PlayerJump();
+                p.isGrounded = false;
+            }
         }
         else if (beamToFloor.collider != null) //If you're close to the floor and haven't jumped, you must be grounded.
         {
@@ -84,7 +96,7 @@ public class PlayerMovement : MonoBehaviour {
                 anim.SetFloat("Move", 0f);
             }
         }
-        else if(anim.GetCurrentAnimatorStateInfo(0).IsName("Grabbed") || anim.GetCurrentAnimatorStateInfo(0).IsName("Grabbing") || anim.GetCurrentAnimatorStateInfo(0).IsName("Grab")) //If you are being grabbed/grabbing, you can't move 
+        else if(anim.GetCurrentAnimatorStateInfo(0).IsName("Grabbed") || anim.GetCurrentAnimatorStateInfo(0).IsName("Grabbing") || anim.GetCurrentAnimatorStateInfo(0).IsName("Grab") || anim.GetCurrentAnimatorStateInfo(0).IsName("Grabbing Ledge")) //If you are being grabbed/grabbing/on ledge, you can't move 
         {
             horizontalMove = 0;
         }
