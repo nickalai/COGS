@@ -199,7 +199,6 @@ GameObject:
   - component: {fileID: 114464066705438280}
   - component: {fileID: 114616412027267786}
   - component: {fileID: 114525743684979214}
-  - component: {fileID: 114282612168500448}
   - component: {fileID: 95964738938793300}
   m_Layer: 2
   m_Name: Player 1
@@ -734,7 +733,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0, y: -2}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -745,7 +744,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 6.84, y: 12.89}
+  m_Size: {x: 7, y: 16.5}
   m_EdgeRadius: 0
 --- !u!70 &70843251364723178
 CapsuleCollider2D:
@@ -759,8 +758,8 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_Size: {x: 6.84, y: 12.89}
+  m_Offset: {x: 0, y: -2}
+  m_Size: {x: 7, y: 15}
   m_Direction: 0
 --- !u!95 &95964738938793300
 Animator:
@@ -791,17 +790,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 407912a7ae459be4eb7ed59521c916ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &114282612168500448
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1691672753728764}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b26387d17b7e57f459ed72f1d7c6a1cb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &114464066705438280
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -829,15 +817,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Bair:
-    hitbox: {fileID: 1298792939446014}
+    hitbox: {fileID: 1940659109430144}
     hitFrame: 0
     attackTime: 0.2
     attackDamage: 5
     knockbackAmount: 500
-    knockbackDirection: {x: -1, y: 0}
+    knockbackDirection: {x: 1, y: 0}
     name: Bair
   Fair:
-    hitbox: {fileID: 1596903478374976}
+    hitbox: {fileID: 1940659109430144}
     hitFrame: 0
     attackTime: 0.2
     attackDamage: 5
@@ -850,23 +838,23 @@ MonoBehaviour:
     attackTime: 0.2
     attackDamage: 5
     knockbackAmount: 500
-    knockbackDirection: {x: 0, y: 1}
+    knockbackDirection: {x: 1, y: 0}
     name: Uair
   Dair:
-    hitbox: {fileID: 1546135754920592}
+    hitbox: {fileID: 1940659109430144}
     hitFrame: 0
     attackTime: 0.2
     attackDamage: 5
     knockbackAmount: 500
-    knockbackDirection: {x: 0, y: -1}
+    knockbackDirection: {x: 1, y: 0}
     name: Dair
   Nair:
-    hitbox: {fileID: 1222218246035116}
+    hitbox: {fileID: 1940659109430144}
     hitFrame: 0
     attackTime: 0.2
     attackDamage: 5
     knockbackAmount: 500
-    knockbackDirection: {x: 0, y: 1}
+    knockbackDirection: {x: 1, y: 0}
     name: Nair
   Ftilt:
     hitbox: {fileID: 1095836322253356}
@@ -885,12 +873,12 @@ MonoBehaviour:
     knockbackDirection: {x: 0, y: 1}
     name: Utilt
   Dtilt:
-    hitbox: {fileID: 1458229779026806}
+    hitbox: {fileID: 1702424861964630}
     hitFrame: 0
     attackTime: 0.2
     attackDamage: 5
     knockbackAmount: 500
-    knockbackDirection: {x: 0, y: -1}
+    knockbackDirection: {x: 1, y: 0}
     name: Dtilt
   Jab:
     hitbox: {fileID: 1702424861964630}
@@ -1036,7 +1024,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: 21300000, guid: 47af3d173132b3e448e12d793549b2ea, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 7bfc66690efa3e04b9755b446478d149, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
